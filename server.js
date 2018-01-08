@@ -98,15 +98,15 @@ app.get('/category-right', function(req, res) {
     res.render('category-right');
 });
 
-app.get('/checkout1', function(req, res) {
+app.post('/checkout1', function(req, res) {
     res.render('checkout1');
 });
 
-app.get('/checkout2', function(req, res) {
+app.post('/checkout2', function(req, res) {
     res.render('checkout2');
 });
 
-app.get('/checkout4', function(req, res) {
+app.post('/checkout4', function(req, res) {
     res.render('checkout4');
 });
 
@@ -118,9 +118,14 @@ app.get('/blog', function(req, res) {
     res.render('blog');
 });
 
-app.get('/*', function(req, res) {
-    res.render('404');
+app.get('/head', function(req, res) {
+    res.render('head');
 });
+
+app.get('/foot', function(req, res) {
+    res.render('foot');
+});
+
 //--- ANNONCES PAGES FIN ---
 
 app.post('/login', urlencodedparser, function(req, res) {
@@ -132,8 +137,13 @@ app.post('/login', urlencodedparser, function(req, res) {
     res.end;
 });
 
-app.listen(1313);
 
+
+app.get('/*', function(req, res) {
+    res.render('404');
+});
+
+app.listen(1313);
 
 
 
