@@ -26,7 +26,7 @@
                     <h4 class="modal-title" id="Login">Identification client</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="customer-orders" method="post">
+                    <form action="login" method="post">
                         <div class="form-group">
                             <input type="text" class="form-control" id="email-modal" placeholder="email">
                         </div>
@@ -129,17 +129,13 @@ _________________________________________________________ -->
                                         <h5>Top 10 achat</h5>
                                         <!--gerer auto-->
                                         <ul>
-                                            <li><a href="category">Trainers</a>
-                                            </li>
-                                            <li><a href="category">Sandals</a>
-                                            </li>
-                                            <li><a href="category">Hiking shoes</a>
-                                            </li>
-                                            <li><a href="category">Casual</a>
-                                            </li>
-                                            <li><a href="category">Hiking shoes</a>
-                                            </li>
-                                            <li><a href="category">Casual</a>
+                                            <li>
+                                                <% drinks.forEach(function(manga) { %>
+                                                    <a href="category">
+                                                        <%= genre.name %> -
+                                                            <%= genre.genre %>
+                                                    </a>
+                                                    <% }); %>
                                             </li>
                                         </ul>
                                     </div>
@@ -151,7 +147,7 @@ _________________________________________________________ -->
                 </li>
 
                 <li class="dropdown yamm-fw">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
+                    <a href="customer-order" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
                 </li>
 
                 <li class="dropdown yamm-fw">

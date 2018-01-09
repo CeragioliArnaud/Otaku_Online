@@ -50,7 +50,7 @@
 
                     <div class="col-md-12">
                         <ul class="breadcrumb">
-                            <li><a href="#">Home</a>
+                            <li><a href="Index">Accueil</a>
                             </li>
                             <li>Contact</li>
                         </ul>
@@ -68,9 +68,6 @@
 
                             <div class="panel-body">
                                 <ul class="nav nav-pills nav-stacked">
-                                    <li>
-                                        <a href="text">Text page</a>
-                                    </li>
                                     <li>
                                         <a href="contact">Contact page</a>
                                     </li>
@@ -99,37 +96,36 @@
                         <div class="box" id="contact">
                             <h1>Contact</h1>
 
-                            <p class="lead">Are you curious about something? Do you have some kind of problem with our products?</p>
-                            <p>Please feel free to contact us, our customer service center is working for you 24/7.</p>
+                            <p class="lead">Êtes vous curieux? Avez vous un problème avec un de nos produits?</p>
+                            <p>Contactez nous, notre service client et disponible 24/7.</p>
 
                             <hr>
 
                             <div class="row">
                                 <div class="col-sm-4">
-                                    <h3><i class="fa fa-map-marker"></i> Address</h3>
-                                    <p>13/25 New Avenue
-                                        <br>New Heaven
-                                        <br>45Y 73J
-                                        <br>England
+                                    <h3><i class="fa fa-map-marker"></i> Adresse</h3>
+                                    <p>650 Route des Colles
+                                        <br>Sophia-Antipolis
+                                        <br>06560 Biot
+                                        <br>PACA
                                         <br>
-                                        <strong>Great Britain</strong>
+                                        <strong>France</strong>
                                     </p>
                                 </div>
                                 <!-- /.col-sm-4 -->
                                 <div class="col-sm-4">
-                                    <h3><i class="fa fa-phone"></i> Call center</h3>
-                                    <p class="text-muted">This number is toll free if calling from Great Britain otherwise we advise you to use the electronic form of communication.</p>
-                                    <p><strong>+33 555 444 333</strong>
+                                    <h3><i class="fa fa-phone"></i> Centre d'aide</h3>
+                                    <p class="text-muted">Ce numéro est gratuit si vous appelez d'un poste fixe en France.</p>
+                                    <p><strong>+33493792742</strong>
                                     </p>
                                 </div>
                                 <!-- /.col-sm-4 -->
                                 <div class="col-sm-4">
                                     <h3><i class="fa fa-envelope"></i> Electronic support</h3>
-                                    <p class="text-muted">Please feel free to write an email to us or to use our electronic ticketing system.</p>
+                                    <p class="text-muted">Ecrivez nous votre problème à l'adresse suivante:.</p>
                                     <ul>
-                                        <li><strong><a href="mailto:">info@fakeemail.com</a></strong>
+                                        <li><strong><a href="mailto:">ceragioli.arnaud@hotmail.com</a></strong>
                                         </li>
-                                        <li><strong><a href="#">Ticketio</a></strong> - our ticketing support platform</li>
                                     </ul>
                                 </div>
                                 <!-- /.col-sm-4 -->
@@ -143,19 +139,19 @@
                             </div>
 
                             <hr>
-                            <h2>Contact form</h2>
+                            <h2>Formulaire de contact</h2>
 
                             <form>
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="firstname">Firstname</label>
+                                            <label for="firstname">Prénom</label>
                                             <input type="text" class="form-control" id="firstname">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="lastname">Lastname</label>
+                                            <label for="lastname">Nom</label>
                                             <input type="text" class="form-control" id="lastname">
                                         </div>
                                     </div>
@@ -167,7 +163,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="subject">Subject</label>
+                                            <label for="subject">Sujet</label>
                                             <input type="text" class="form-control" id="subject">
                                         </div>
                                     </div>
@@ -179,7 +175,7 @@
                                     </div>
 
                                     <div class="col-sm-12 text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Send message</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> Envoyez message</button>
 
                                     </div>
                                 </div>
@@ -226,14 +222,14 @@
             function initialize() {
                 var mapOptions = {
                     zoom: 15,
-                    center: new google.maps.LatLng(49.1678136, 16.5671893),
+                    center: new google.maps.LatLng(43.6166598, 7.071064799999931),
                     mapTypeId: google.maps.MapTypeId.ROAD,
                     scrollwheel: false
                 }
                 var map = new google.maps.Map(document.getElementById('map'),
                     mapOptions);
 
-                var myLatLng = new google.maps.LatLng(49.1681989, 16.5650808);
+                var myLatLng = new google.maps.LatLng(43.6166598, 7.071064799999931);
                 var marker = new google.maps.Marker({
                     position: myLatLng,
                     map: map
