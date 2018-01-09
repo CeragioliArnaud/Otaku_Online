@@ -1,4 +1,4 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 const properties = require('./Utils/properties');
 const logger = require('./Utils/logger').logger_dbManager;
 
@@ -10,13 +10,9 @@ const config = {
     password: properties.get('db.postgres.pwd')
 };
 
-const client = new Client(config);
-client.connect(err => {
-    if (err) {
-        logger.error(properties.get("console.db.start.KO") + "L'erreur suivante est survenue : " + err.message);
-    } else {
-        logger.info(properties.get("console.db.start"));
-    }
-});
 
-module.exports = client;
+const pool = new Pool(config);
+pool.on('connect', () => { logger.debug(properties.get("console.LDAP.start")); })
+pool.on('remove', () => { logger.debug(properties.get("console.LDAP.stop")); })
+
+module.exports = pool;

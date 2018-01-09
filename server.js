@@ -4,6 +4,7 @@ const properties = require('./Utils/properties');
 require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
+const User = require('./Model/User')
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
 
@@ -22,32 +23,22 @@ logger.info(properties.get("console.start"));
 
 //--- ANNONCES PAGES DBT ---
 
-app.all('/*', (req, res) => {
+app.all('/*', (req, res, next) => {
     logger.debug('Requête reçue : ' + req.url);
-} )
+    next();
+});
 
 app.get('/', function(req, res) {
     res.redirect('/index');
 });
 
-app.get('/login', function(req, res) {
-    res.render('login');
-});
-
-app.get('/index', function(req, res) {
-    res.render('index');
-});
-
-app.get('/register', function(req, res) {
-    res.render('register');
-});
-
-app.get('/checkout3', function(req, res) {
-    res.render('checkout3');
-});
-
-app.get('/customer-account', function(req, res) {
-    res.render('customer-account');
+app.get('/:id', function(req, res) {
+    res.render(req.params["id"], {}, (err, file) => {
+        if(err)
+            res.redirect('404');
+        else
+            res.send(file);
+    });
 });
 
 app.post('/customer-order', function(req, res) {
@@ -58,46 +49,6 @@ app.post('/customer-orders', function(req, res) {
     res.render('customer-orders');
 });
 
-app.get('/customer-wishlist', function(req, res) {
-    res.render('customer-wishlist');
-});
-
-app.get('/detail', function(req, res) {
-    res.render('detail');
-});
-
-app.get('/faq', function(req, res) {
-    res.render('faq');
-});
-
-app.get('/post', function(req, res) {
-    res.render('post');
-});
-
-app.get('/text', function(req, res) {
-    res.render('text');
-});
-
-app.get('/text-right', function(req, res) {
-    res.render('text-right');
-});
-
-app.get('/basket', function(req, res) {
-    res.render('basket');
-});
-
-app.get('/category', function(req, res) {
-    res.render('category');
-});
-
-app.get('/category-full', function(req, res) {
-    res.render('category-full');
-});
-
-app.get('/category-right', function(req, res) {
-    res.render('category-right');
-});
-
 app.post('/checkout1', function(req, res) {
     res.render('checkout1');
 });
@@ -106,24 +57,12 @@ app.post('/checkout2', function(req, res) {
     res.render('checkout2');
 });
 
+app.post('/checkout3', function(req, res) {
+    res.render('checkout3');
+});
+
 app.post('/checkout4', function(req, res) {
     res.render('checkout4');
-});
-
-app.get('/contact', function(req, res) {
-    res.render('contact');
-});
-
-app.get('/blog', function(req, res) {
-    res.render('blog');
-});
-
-app.get('/head', function(req, res) {
-    res.render('head');
-});
-
-app.get('/foot', function(req, res) {
-    res.render('foot');
 });
 
 //--- ANNONCES PAGES FIN ---
@@ -135,12 +74,6 @@ app.post('/login', urlencodedparser, function(req, res) {
     dbManager.findUser(UName);
     res.redirect('/index')
     res.end;
-});
-
-
-
-app.get('/*', function(req, res) {
-    res.render('404');
 });
 
 app.listen(1313);

@@ -24,7 +24,8 @@
     "morgan": "^1.6.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.1",
-    "sequelize": "^4.28.6",
+    "promise": "^8.0.1",
+    "sequelize": "^4.31.0",
     "serve-favicon": "^2.3.0",
     "winston": "^2.4.0"
   }
