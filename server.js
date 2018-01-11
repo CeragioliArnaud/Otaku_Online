@@ -53,15 +53,15 @@ app.get('/customer-account', function(req, res) {
     res.render('customer-account');
 });
 
-app.get('/customer-order', function(req, res) {
+app.post('/customer-order', function(req, res) {
     res.render('customer-order');
 });
 
-app.get('/customer-orders', function(req, res) {
+app.post('/customer-orders', function(req, res) {
     res.render('customer-orders');
 });
 
-app.get('/customer-whislist', function(req, res) {
+app.get('/customer-wishlist', function(req, res) {
     res.render('customer-wishlist');
 });
 
