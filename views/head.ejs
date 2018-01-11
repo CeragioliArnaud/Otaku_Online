@@ -1,55 +1,202 @@
-<!DOCTYPE html>
-<html>
+<!-- *** TOPBAR ***
+ _________________________________________________________ -->
+<div id="top">
+    <div class="container">
+        <div class="col-md-6 offer" data-animate="fadeInDown">
+            <a href=""></a>
+            <a href="#"></a>
+        </div>
+        <div class="col-md-6" data-animate="fadeInDown">
+            <ul class="menu">
+                <li><a href="#" data-toggle="modal" data-target="#login-modal">Connexion</a>
+                </li>
+                <li><a href="register">S'enregistrer</a>
+                </li>
+                <li><a href="contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
 
-<head>
-    <title>
-        <%= title %>
-    </title>
-    <div>,</div>
-    <div id="barHeader">
-        <img src="http://localhost:1313/images/Soleil_Manga.jpg" style="float: left;">
-        <a href="/index">Accueil</a>
-        <a href="/login">Connexion</a>
-        <a href="/register">Inscription</a>
-        <a href="/bucket">Panier</a>
-        <img src="x">
-        <img src="x">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="Login">Identification client</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="customer-orders" method="post">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="email-modal" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="password-modal" placeholder="password">
+                        </div>
 
+                        <p class="text-center">
+                            <button class="btn btn-primary"><i class="fa fa-sign-in"></i>Connexion</button>
+                        </p>
+
+                    </form>
+
+                    <p class="text-center text-muted">Pas encore inscrit?</p>
+                    <p class="text-center text-muted"><a href="register"><strong>Inscrivez vous</strong></a>! C'est facile et réalisable en 1&nbsp;minute</p>
+
+                </div>
+            </div>
+        </div>
     </div>
 
-    <style>
-        body {
-            font-family: "Segoe UI", Arial, sans-serif;
-            letter-spacing: 1px;
-        }
-        
-        .error {
-            color: red
-        }
-        
-        .success {
-            color: green;
-        }
-        
-        #barHeader {
-            background: red;
-            height: 10%;
-            padding: 1%;
-        }
-        
-        #barHeader a {
-            text-decoration: none;
-            margin-right: 10%;
-            font-family: "Segoe UI", Arial, sans-serif;
-            font-weight: 500;
-            font-size: 20px;
-            color: #84837f;
-        }
-        
-        #barHeader img {
-            float: right;
-        }
-    </style>
-</head>
+</div>
 
-<body>
+<!-- *** TOP BAR END *** -->
+
+<!-- *** NAVBAR ***
+_________________________________________________________ -->
+
+<div class="navbar navbar-default yamm" role="navigation" id="navbar">
+    <div class="container">
+        <div class="navbar-header">
+
+            <a class="navbar-brand home" href="index" data-animate-hover="bounce">
+                <img src="img/logo.png" alt="Obaju logo" class="hidden-xs">
+                <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
+            </a>
+            <div class="navbar-buttons">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-align-justify"></i>
+                </button>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search">
+                    <span class="sr-only">Toggle search</span>
+                    <i class="fa fa-search"></i>
+                </button>
+                <a class="btn btn-default navbar-toggle" href="basket">
+                    <i class="fa fa-shopping-cart"></i> <span class="hidden-xs">X items in cart</span>
+                </a>
+            </div>
+        </div>
+        <!--/.navbar-header -->
+
+        <div class="navbar-collapse collapse" id="navigation">
+
+            <ul class="nav navbar-nav navbar-left">
+                <li class="active"><a href="index">Accueil</a>
+                </li>
+                <li class="dropdown yamm-fw">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mangas<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <div class="yamm-content">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h5>Catégories</h5>
+                                        <!--gerer auto-->
+                                        <ul>
+                                            <li><a href="category">Shonen</a>
+                                            </li>
+                                            <li><a href="category">Shojo</a>
+                                            </li>
+                                            <li><a href="category">Seinen</a>
+                                            </li>
+                                            <li><a href="category">Mature Shojo</a>
+                                            </li>
+                                            <li><a href="category">Gekiga</a>
+                                            </li>
+                                            <li><a href="category">Kodomo </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h5>Genres</h5>
+                                        <ul>
+                                            <li><a href="category">Fantasy</a>
+                                            </li>
+                                            <li><a href="category">Combat</a>
+                                            </li>
+                                            <li><a href="category">Amitié</a>
+                                            </li>
+                                            <li><a href="category">Detective</a>
+                                            </li>
+                                            <li><a href="category">Ecchi</a>
+                                            </li>
+                                            <li><a href="category">Hentai</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h5>Top 10 achat</h5>
+                                        <!--gerer auto-->
+                                        <ul>
+                                            <li><a href="category">Trainers</a>
+                                            </li>
+                                            <li><a href="category">Sandals</a>
+                                            </li>
+                                            <li><a href="category">Hiking shoes</a>
+                                            </li>
+                                            <li><a href="category">Casual</a>
+                                            </li>
+                                            <li><a href="category">Hiking shoes</a>
+                                            </li>
+                                            <li><a href="category">Casual</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.yamm-content -->
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown yamm-fw">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
+                </li>
+
+                <li class="dropdown yamm-fw">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Chat</a>
+                </li>
+            </ul>
+
+        </div>
+        <!--/.nav-collapse -->
+
+        <div class="navbar-buttons">
+
+            <div class="navbar-collapse collapse right" id="basket-overview">
+                <a href="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span class="hidden-sm">X items in cart</span></a>
+            </div>
+            <!--/.nav-collapse -->
+
+            <div class="navbar-collapse collapse right" id="search-not-mobile">
+                <button type="button" class="btn navbar-btn btn-primary" data-toggle="collapse" data-target="#search">
+                    <span class="sr-only">Toggle search</span>
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="collapse clearfix" id="search">
+
+            <form class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-btn">
+
+        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+
+        </span>
+                </div>
+            </form>
+
+        </div>
+        <!--/.nav-collapse -->
+
+    </div>
+    <!-- /.container -->
+</div>
+<!-- /#navbar -->
+
+<!-- *** NAVBAR END *** -->

@@ -45,7 +45,7 @@ app.get('/404', function(req, res) {
     res.render('404');
 });
 
-app.get('/checkout3', function(req, res) {
+app.post('/checkout3', function(req, res) {
     res.render('checkout3');
 });
 
@@ -101,15 +101,15 @@ app.get('/category-right', function(req, res) {
     res.render('category-right');
 });
 
-app.get('/checkout1', function(req, res) {
+app.post('/checkout1', function(req, res) {
     res.render('checkout1');
 });
 
-app.get('/checkout2', function(req, res) {
+app.post('/checkout2', function(req, res) {
     res.render('checkout2');
 });
 
-app.get('/checkout4', function(req, res) {
+app.post('/checkout4', function(req, res) {
     res.render('checkout4');
 });
 
@@ -119,6 +119,14 @@ app.get('/contact', function(req, res) {
 
 app.get('/blog', function(req, res) {
     res.render('blog');
+});
+
+app.get('/head', function(req, res) {
+    res.render('head');
+});
+
+app.get('/foot', function(req, res) {
+    res.render('foot');
 });
 //--- ANNONCES PAGES FIN ---
 
