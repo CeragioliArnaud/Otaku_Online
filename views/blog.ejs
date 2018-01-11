@@ -41,6 +41,7 @@
 </head>
 
 <body>
+
     <!-- *** TOPBAR ***
  _________________________________________________________ -->
     <div id="top">
@@ -406,69 +407,127 @@
         <div id="content">
             <div class="container">
 
-                <div class="col-md-12">
+                <div class="col-sm-12">
+                    <ul class="breadcrumb">
+
+                        <li><a href="index">Home</a>
+                        </li>
+                        <li>Blog listing</li>
+                    </ul>
+                </div>
+
+                <!-- *** LEFT COLUMN ***
+		     _________________________________________________________ -->
+
+                <div class="col-sm-9" id="blog-listing">
 
                     <ul class="breadcrumb">
+
                         <li><a href="#">Home</a>
                         </li>
-                        <li>New account / Sign in</li>
+                        <li>Blog listing</li>
                     </ul>
 
-                </div>
 
-                <div class="col-md-6">
                     <div class="box">
-                        <h1>New account</h1>
 
-                        <p class="lead">Not our registered customer yet?</p>
-                        <p>With registration with us new world of fashion, fantastic discounts and much more opens to you! The whole process will not take you more than a minute!</p>
-                        <p class="text-muted">If you have any questions, please feel free to <a href="contact">contact us</a>, our customer service center is working for you 24/7.</p>
+                        <h1>Blog category name</h1>
+                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.</p>
 
-                        <hr>
-
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i> Register</button>
-                            </div>
-                        </form>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="box">
-                        <h1>Login</h1>
-
-                        <p class="lead">Already our customer?</p>
-                        <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
-                            mi vitae est. Mauris placerat eleifend leo.</p>
-
+                    <div class="post">
+                        <h2><a href="post">Fashion now</a></h2>
+                        <p class="author-category">By <a href="#">John Slim</a> in <a href="">Fashion and style</a>
+                        </p>
                         <hr>
+                        <p class="date-comments">
+                            <a href="post"><i class="fa fa-calendar-o"></i> June 20, 2013</a>
+                            <a href="post"><i class="fa fa-comment-o"></i> 8 Comments</a>
+                        </p>
+                        <div class="image">
+                            <a href="post">
+                                <img src="img/blog2.jpg" class="img-responsive" alt="Example blog post alt">
+                            </a>
+                        </div>
+                        <p class="intro">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
+                            mi vitae est. Mauris placerat eleifend leo.</p>
+                        <p class="read-more"><a href="post" class="btn btn-primary">Continue reading</a>
+                        </p>
+                    </div>
 
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
-                            </div>
-                        </form>
+
+                    <div class="post">
+                        <h2><a href="post">Who is who - example blog post</a></h2>
+                        <p class="author-category">By <a href="#">John Slim</a> in <a href="">About Minimal</a>
+                        </p>
+                        <hr>
+                        <p class="date-comments">
+                            <a href="post"><i class="fa fa-calendar-o"></i> June 20, 2013</a>
+                            <a href="post"><i class="fa fa-comment-o"></i> 8 Comments</a>
+                        </p>
+                        <div class="image">
+                            <a href="post">
+                                <img src="img/blog.jpg" class="img-responsive" alt="Example blog post alt">
+                            </a>
+                        </div>
+                        <p class="intro">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
+                            mi vitae est. Mauris placerat eleifend leo.</p>
+                        <p class="read-more"><a href="post" class="btn btn-primary">Continue reading</a>
+                        </p>
+                    </div>
+
+                    <ul class="pager">
+                        <li class="previous"><a href="#">&larr; Older</a>
+                        </li>
+                        <li class="next disabled"><a href="#">Newer &rarr;</a>
+                        </li>
+                    </ul>
+
+
+
+                </div>
+                <!-- /.col-md-9 -->
+
+                <!-- *** LEFT COLUMN END *** -->
+
+
+                <div class="col-md-3">
+                    <!-- *** BLOG MENU ***
+ _________________________________________________________ -->
+                    <div class="panel panel-default sidebar-menu">
+
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Blog</h3>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a href="blog">About us</a>
+                                </li>
+                                <li class="active">
+                                    <a href="blog">Fashion</a>
+                                </li>
+                                <li>
+                                    <a href="blog">News and gossip</a>
+                                </li>
+                                <li>
+                                    <a href="blog">Design</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.col-md-3 -->
+
+                    <!-- *** BLOG MENU END *** -->
+
+                    <div class="banner">
+                        <a href="#">
+                            <img src="img/banner.jpg" alt="sales 2014" class="img-responsive">
+                        </a>
                     </div>
                 </div>
 
@@ -627,7 +686,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <p class="pull-right">Template by <a href="https://bootstrapious.com/e-commerce-templates">Bootstrapious</a> & <a href="https://fity.cz">Fity</a>
+                   
                          <!-- Not removing these links is part of the license conditions of the template. Thanks for understanding :) If you want to use the template without the attribution links, you can do so after supporting further themes development at https://bootstrapious.com/donate  -->
                     </p>
                 </div>
@@ -653,6 +712,9 @@
     <script src="js/bootstrap-hover-dropdown.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/front.js"></script>
+
+
+
 
 
 

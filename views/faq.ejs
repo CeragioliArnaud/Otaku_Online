@@ -41,6 +41,7 @@
 </head>
 
 <body>
+
     <!-- *** TOPBAR ***
  _________________________________________________________ -->
     <div id="top">
@@ -407,72 +408,143 @@
             <div class="container">
 
                 <div class="col-md-12">
-
                     <ul class="breadcrumb">
                         <li><a href="#">Home</a>
                         </li>
-                        <li>New account / Sign in</li>
+                        <li>FAQ</li>
                     </ul>
 
                 </div>
 
-                <div class="col-md-6">
-                    <div class="box">
-                        <h1>New account</h1>
+                <div class="col-md-3">
+                    <!-- *** PAGES MENU ***
+ _________________________________________________________ -->
+                    <div class="panel panel-default sidebar-menu">
 
-                        <p class="lead">Not our registered customer yet?</p>
-                        <p>With registration with us new world of fashion, fantastic discounts and much more opens to you! The whole process will not take you more than a minute!</p>
-                        <p class="text-muted">If you have any questions, please feel free to <a href="contact">contact us</a>, our customer service center is working for you 24/7.</p>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Pages</h3>
+                        </div>
 
-                        <hr>
+                        <div class="panel-body">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li>
+                                    <a href="text">Text page</a>
+                                </li>
+                                <li>
+                                    <a href="contact">Contact page</a>
+                                </li>
+                                <li>
+                                    <a href="faq">FAQ</a>
+                                </li>
 
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i> Register</button>
-                            </div>
-                        </form>
+                            </ul>
+
+                        </div>
+                    </div>
+
+                    <!-- *** PAGES MENU END *** -->
+
+
+                    <div class="banner">
+                        <a href="#">
+                            <img src="img/banner.jpg" alt="sales 2014" class="img-responsive">
+                        </a>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="box">
-                        <h1>Login</h1>
+                <div class="col-md-9">
 
-                        <p class="lead">Already our customer?</p>
-                        <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
-                            mi vitae est. Mauris placerat eleifend leo.</p>
+
+                    <div class="box" id="contact">
+                        <h1>Frequently asked questions</h1>
+
+                        <p class="lead">Are you curious about something? Do you have some kind of problem with our products?</p>
+                        <p>Please feel free to contact us, our customer service center is working for you 24/7.</p>
 
                         <hr>
 
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
+                        <div class="panel-group" id="accordion">
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+
+					    <a data-toggle="collapse" data-parent="#accordion" href="#faq1">
+
+						1. What to do if I have still not received the order?
+
+					    </a>
+
+					</h4>
+                                </div>
+                                <div id="faq1" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper.
+                                            Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
+                                        <ul>
+                                            <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
+                                            <li>Aliquam tincidunt mauris eu risus.</li>
+                                            <li>Vestibulum auctor dapibus neque.</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
+                            <!-- /.panel -->
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+
+					    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+
+						2. What are the postal rates?
+
+					    </a>
+
+					</h4>
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
+                                        on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat
+                                        craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+                            <!-- /.panel -->
+
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+
+					    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+
+						3. Do you send overseas?
+
+					    </a>
+
+					</h4>
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
+                                        on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat
+                                        craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                            <!-- /.panel -->
+
+                        </div>
+                        <!-- /.panel-group -->
+
+
                     </div>
+
+
                 </div>
-
-
+                <!-- /.col-md-9 -->
             </div>
             <!-- /.container -->
         </div>

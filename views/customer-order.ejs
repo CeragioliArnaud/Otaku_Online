@@ -409,69 +409,142 @@
                 <div class="col-md-12">
 
                     <ul class="breadcrumb">
-                        <li><a href="#">Home</a>
+                        <li><a href="index">Home</a>
                         </li>
-                        <li>New account / Sign in</li>
+                        <li><a href="#">My orders</a>
+                        </li>
+                        <li>Order # 1735</li>
                     </ul>
 
                 </div>
 
-                <div class="col-md-6">
-                    <div class="box">
-                        <h1>New account</h1>
+                <div class="col-md-3">
+                    <!-- *** CUSTOMER MENU ***
+ _________________________________________________________ -->
+                    <div class="panel panel-default sidebar-menu">
 
-                        <p class="lead">Not our registered customer yet?</p>
-                        <p>With registration with us new world of fashion, fantastic discounts and much more opens to you! The whole process will not take you more than a minute!</p>
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Customer section</h3>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <ul class="nav nav-pills nav-stacked">
+                                <li class="active">
+                                    <a href="customer-orders"><i class="fa fa-list"></i> My orders</a>
+                                </li>
+                                <li>
+                                    <a href="customer-wishlist"><i class="fa fa-heart"></i> My wishlist</a>
+                                </li>
+                                <li>
+                                    <a href="customer-account"><i class="fa fa-user"></i> My account</a>
+                                </li>
+                                <li>
+                                    <a href="index"><i class="fa fa-sign-out"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- /.col-md-3 -->
+
+                    <!-- *** CUSTOMER MENU END *** -->
+                </div>
+
+                <div class="col-md-9" id="customer-order">
+                    <div class="box">
+                        <h1>Order #1735</h1>
+
+                        <p class="lead">Order #1735 was placed on <strong>22/06/2013</strong> and is currently <strong>Being prepared</strong>.</p>
                         <p class="text-muted">If you have any questions, please feel free to <a href="contact">contact us</a>, our customer service center is working for you 24/7.</p>
 
                         <hr>
 
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control" id="name">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit price</th>
+                                        <th>Discount</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="#">
+                                                <img src="img/detailsquare.jpg" alt="White Blouse Armani">
+                                            </a>
+                                        </td>
+                                        <td><a href="#">White Blouse Armani</a>
+                                        </td>
+                                        <td>2</td>
+                                        <td>$123.00</td>
+                                        <td>$0.00</td>
+                                        <td>$246.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#">
+                                                <img src="img/basketsquare.jpg" alt="Black Blouse Armani">
+                                            </a>
+                                        </td>
+                                        <td><a href="#">Black Blouse Armani</a>
+                                        </td>
+                                        <td>1</td>
+                                        <td>$200.00</td>
+                                        <td>$0.00</td>
+                                        <td>$200.00</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="5" class="text-right">Order subtotal</th>
+                                        <th>$446.00</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5" class="text-right">Shipping and handling</th>
+                                        <th>$10.00</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5" class="text-right">Tax</th>
+                                        <th>$0.00</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="5" class="text-right">Total</th>
+                                        <th>$456.00</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+                        </div>
+                        <!-- /.table-responsive -->
+
+                        <div class="row addresses">
+                            <div class="col-md-6">
+                                <h2>Invoice address</h2>
+                                <p>John Brown
+                                    <br>13/25 New Avenue
+                                    <br>New Heaven
+                                    <br>45Y 73J
+                                    <br>England
+                                    <br>Great Britain</p>
                             </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
+                            <div class="col-md-6">
+                                <h2>Shipping address</h2>
+                                <p>John Brown
+                                    <br>13/25 New Avenue
+                                    <br>New Heaven
+                                    <br>45Y 73J
+                                    <br>England
+                                    <br>Great Britain</p>
                             </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i> Register</button>
-                            </div>
-                        </form>
+                        </div>
+
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="box">
-                        <h1>Login</h1>
-
-                        <p class="lead">Already our customer?</p>
-                        <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies
-                            mi vitae est. Mauris placerat eleifend leo.</p>
-
-                        <hr>
-
-                        <form action="customer-orders" method="post">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="text" class="form-control" id="email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
 
             </div>
             <!-- /.container -->
