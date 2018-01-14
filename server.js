@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
 const properties = require('./Utils/properties');
-require('./dbManager');
+const dbManager = require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
-const User = require('./Model/User')
+const User = require('./Model/User');
+
+
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
 
@@ -14,12 +16,8 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
-
 app.use(express.static(__dirname + '/public')); // Indique que le dossier /public contient des fichiers statiques (middleware chargé de base)
-
-logger.info(properties.get("console.start"));
 
 //--- ANNONCES PAGES DBT ---
 
@@ -76,19 +74,37 @@ app.post('/login', urlencodedparser, function(req, res) {
     res.end;
 });
 
-app.listen(1313);
 
+/****************
+*				*
+*  Lancement du *
+*    Serveur	*
+*				*
+****************/
 
+var server = app.listen(properties.get("server.port"), properties.get("server.hostname"), () => {
+	dbManager.start();
+    logger.info(properties.get("console.start"));
+});
 
-// ARRET DU SERVEUR
+/****************
+*				*
+* Arret/Erreurs *
+*    Serveur	*
+*				*
+****************/
 
 process.on('SIGINT', () => {
-	process.stdout.write("\r\x1b[K");
+    process.stdout.write("\r\x1b[K");
+    dbManager.stop();
+    server.close();
     logger.info(properties.get("console.stop"));
     process.exit(0);
 });
 
 process.on('uncaughtException', (e) => {
-    logger.log("FATAL", e);
+    logger.log("fatal", e);
+    dbManager.stop();
+    server.close();
     process.exit(99);
 })

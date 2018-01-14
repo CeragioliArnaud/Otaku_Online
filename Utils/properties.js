@@ -1,5 +1,6 @@
 const PropertiesReader = require('properties-reader');
-const properties = PropertiesReader('./Properties/db.properties');
+const properties = PropertiesReader('./Properties/server.properties')
+		.append("./Properties/db.properties");
 const utils = require('./functionsUtils');
 
 module.exports = {

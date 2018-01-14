@@ -10,9 +10,28 @@ const config = {
     password: properties.get('db.postgres.pwd')
 };
 
-
 const pool = new Pool(config);
-pool.on('connect', () => { logger.debug(properties.get("console.LDAP.start")); })
-pool.on('remove', () => { logger.debug(properties.get("console.LDAP.stop")); })
 
-module.exports = pool;
+module.exports = {
+    
+    start: () => {
+        pool.connect((err) => {
+            if (err) {
+                logger.error(properties.get("db.start.KO") + "\nL'erreur suivante est survenue : " + err.message);
+            } else {
+                logger.info(properties.get("db.start"));
+            }
+        });
+    },
+
+    pool: pool,
+
+    stop: () => {
+        try {
+            pool.end();
+            logger.info(properties.get("db.stop"));
+        } catch (e) {
+            logger.error("stop() - Error : " + e.message);
+        }
+    }
+}
