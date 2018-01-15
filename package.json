@@ -1,35 +1,33 @@
 {
-  "name": "tplpsil",
-  "version": "0.0.1",
-  "description": "Authentification NodeJs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "keywords": [
-    "NODEJS"
-  ],
-  "author": "kbouzidi",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.18.2",
-    "bunyan": "^1.8.12",
-    "ejs": "^2.5.7",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "express-sessions": "^1.0.6",
-    "http": "0.0.0",
-    "log4js": "^0.6.29",
-    "morgan": "^1.6.1",
-    "mysql": "^2.15.0",
-    "mysql2": "^1.5.1",
-    "pg": "^7.4.1",
-    "promise": "^8.0.1",
-    "properties-reader": "0.0.16",
-    "sequelize": "^4.31.0",
-    "serve-favicon": "^2.3.0",
-    "string": "^3.3.3",
-    "winston": "^2.4.0"
-  }
+    "name": "Otaku_Online",
+    "version": "0.0.1",
+    "description": "Vente de manga en ligne",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "keywords": [
+        "nodeJs",
+        "otaku",
+        "online",
+        "mangas",
+        "e-commerce"
+    ],
+    "author": "Clark Kilian & Ceragioli Arnaud",
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "ejs": "^2.5.7",
+        "express": "^4.16.2",
+        "express-session": "^1.15.6",
+        "express-sessions": "^1.0.6",
+        "http": "0.0.0",
+        "serve-favicon": "^2.3.0",
+        "pg": "^7.4.1",
+        "promise": "^8.0.1",
+        "properties-reader": "0.0.16",
+        "sequelize": "^4.31.2",
+        "sha256": "^0.2.0",
+        "string": "^3.3.3",
+        "winston": "^2.4.0"
+    }
 }

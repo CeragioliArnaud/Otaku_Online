@@ -6,6 +6,8 @@ const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
 const User = require('./Model/User');
 const userController = require('./controller/user');
+const session = require('express-session');
+
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
 
@@ -15,19 +17,22 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
-
 app.use(express.static(__dirname + '/public')); // Indique que le dossier /public contient des fichiers statiques (middleware chargé de base)
-
-logger.info(properties.get("console.start"));
+app.use(session({
+    secret: "azerty1234",
+    resave: false,
+    saveUninitialized: true
+}));
 
 //--- ANNONCES PAGES DBT ---
 
 app.all('/*', (req, res, next) => {
-    logger.debug('Requête reçue : ' + req.url);
+    logger.debug('Requête reçue (' + (req.session.user ? req.session.user._pseudo : 'anonyme') + ') : ' + req.url);
     next();
 });
+
+
 
 app.get('/', function(req, res) {
     res.redirect('/index');
@@ -114,27 +119,53 @@ app.post('/checkout4', function(req, res) {
 //--- ANNONCES PAGES FIN ---
 
 app.post('/login', urlencodedparser, function(req, res) {
-    UName = req.body.username;
-    UPwd = req.body.password;
-    //dbManager.insertUser(UName, UPwd);
-    dbManager.findUser(UName);
-    res.redirect('/index')
-    res.end;
+    user.select_authenticateUser(req.body.pseudo, req.body.pwd, (err, User) => {
+        if (err) {
+            logger.info(err);
+            res.status(401);
+            res.redirect('/login');
+            res.end;
+        } else {
+            req.session.user = User;
+            logger.info(User.pseudo + " s'est connecté");
+            res.status(200);
+            res.redirect('/index');
+            res.end;
+        }
+    });
 });
 
-app.listen(1313);
 
+/****************
+ *				*
+ *  Lancement du *
+ *    Serveur	*
+ *				*
+ ****************/
 
+var server = app.listen(properties.get("server.port"), properties.get("server.hostname"), () => {
+    dbManager.start();
+    logger.info(properties.get("console.start"));
+});
 
-// ARRET DU SERVEUR
+/****************
+ *				*
+ * Arret/Erreurs *
+ *    Serveur	*
+ *				*
+ ****************/
 
 process.on('SIGINT', () => {
     process.stdout.write("\r\x1b[K");
+    dbManager.stop();
+    server.close();
     logger.info(properties.get("console.stop"));
     process.exit(0);
 });
 
 process.on('uncaughtException', (e) => {
-    logger.log("FATAL", e);
+    logger.log("fatal", e);
+    dbManager.stop();
+    server.close();
     process.exit(99);
 })

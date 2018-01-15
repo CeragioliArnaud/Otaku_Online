@@ -1,13 +1,12 @@
-const pool = require('./dbManager');
+const pool = require('../dbManager').pool;
 const utils = require('../Utils/functionsUtils');
 const User = require('../Model/User');
-const logger = require('../Utils/logger');
-
+const logger = require('../Utils/logger').logger_dbManager;
+const sha256 = require ('sha256'); //TODO TEMPORAIRE !!!
 module.exports = {
 
     insert_createUser: (user, callback) => {
         (async () => {
-            const client = await pool.connect();
             try {
                 logger.info("Requête demandée : insert_createUser(" + user.toString() + ")");
 
@@ -34,22 +33,20 @@ module.exports = {
             } catch (e) {
                 logger.error("Echec de la requête insert_createUser(" + user.toString() + ") : " + e.message)
                 throw e;
-            } finally {
-                await client.release();
             }
         })().catch(e => logger.error(e.message))
     },
 
     select_authenticateUser: (login, pwd, callback) => {
         (async () => {
-            const client = await pool.connect();
             try {
                 logger.info("Requête demandée : select_authenticateUser(" + login + ")");
                 var query = "SELECT first_name, last_name, pseudo, email, CASE WHEN state='ADMI' THEN state ELSE NULL END " +
                             "FROM users " + 
-                            "WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1 AND pwd=$2 AND state!='SUSP'";
-                const result = await client.query(query, [login, pwd]);
-                
+                            "WHERE " + (utils.isEmail(login) ? "email" : "pseudo") + "=$1 AND pwd=$2 AND state!='SUSP'";
+
+                const result = await pool.query(query, [login, sha256(pwd)]);
+
                 if(result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("Echec d'authentification")) : new Error("Echec d'authentification"));
                 } else if(result.rowCount > 1) {
@@ -64,10 +61,8 @@ module.exports = {
                     return (utils.isCallback(callback) ? callback(undefined, user) : user);
                 }
             } catch (e) {
-                logger.error("Echec de la requête insertUser(" + user.toString() + ") : " + e.message)
+                logger.error("Echec de la requête select_authenticateUser(" + login + ") : " + e.message)
                 throw e;
-            } finally {
-                await client.release();
             }
         })().catch(e => logger.error(e.message))
     },
@@ -76,7 +71,6 @@ module.exports = {
     /*
     update_updateUser: (user, email) => {
         (async () => {
-            const client = await pool.connect();
             try {
                 logger.info("Requête demandée : update_updateUser(" + user.toString() + ")");
                 const query = "UPDATE users SET first_name=$1, last_name=$2, pseudo=$3, email=$4, phone=$5";
@@ -87,8 +81,6 @@ module.exports = {
             } catch (e) {
                 logger.error("Echec de la requête update_updateUser(" + user.toString() + ") : " + e.message)
                 throw e;
-            } finally {
-                await client.release();
             }
         })().catch(e => logger.error(e.message))
     },
@@ -96,7 +88,6 @@ module.exports = {
 
     update_suspendUser: (login, callback) => {
         (async () => {
-            const client = await pool.connect();
             try {
                 logger.info("Requête demandée : update_suspendUser(" + login + ")");
                 const query = "UPDATE users SET state='SUSP' WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1";
@@ -110,8 +101,6 @@ module.exports = {
             } catch (e) {
                 logger.error("Echec de la requête update_suspendUser(" + login + ") : " + e.message)
                 throw e;
-            } finally {
-                await client.release();
             }
         })().catch(e => logger.error(e.message))
     }
