@@ -3,6 +3,7 @@ const app = express();
 const properties = require('./Utils/properties');
 const dbManager = require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
+const utils = require('./Utils/functionsUtils');
 const bodyParser = require('body-parser');
 const User = require('./Model/User');
 const userController = require('./controller/user');
@@ -33,25 +34,13 @@ app.all('/*', (req, res, next) => {
     next();
 });
 
-
-
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.redirect('/index');
 });
 
-app.get('/adminManagement', function(req, res) {
-    res.render("adminManagement", {}, (err, file) => {
-        if (err) {
-            console.log(err);
-            res.redirect('404');
-        } else
-            res.send(file);
-    });
-});
-
-app.get('/categories', function(req, res) {
+app.get('/categories', function (req, res) {
     mangaController.select_allCategories((err, result) => {
-        if(err) {
+        if (err) {
             res.status(500).send("Une erreur est survenue");
         } else {
             res.status(200).send(result);
@@ -59,24 +48,13 @@ app.get('/categories', function(req, res) {
     })
 });
 
-app.get('/:id', function(req, res) {
-    res.render(req.params["id"], {}, (err, file) => {
-        if (err)
-            res.redirect('404');
-        else
-            res.send(file);
-    });
-});
-
-
-app.post('/register', function(req, res) {
-    //TODO récup les infos depuis la requête
-    var user = new User('', '', '', '', '', '');
+app.post('/register', (req, res) => {
+    var user = new User("", "", req.body.pseudo, req.body.email, "", req.body.pwd);
     userController.insert_createUser(user, (err, result) => {
         if (err) {
-            //TODO
+            res.status(500).send(err.message);
         } else {
-            //TODO
+            res.status(200).send(result);
         }
     })
 
@@ -84,7 +62,19 @@ app.post('/register', function(req, res) {
     //res.render('');
 });
 
-app.post('/adminUser', function(req, res) {
+app.all('/admin/*', (req, res, next) => {
+    if (req.session.user && req.session.user._isAdmin) {
+        next();
+    } else {
+        res.redirect('/404');
+    }
+});
+
+app.get('/admin/test', (req, res) => {
+    res.status(200).send("OK");
+});
+
+app.post('/admin/user', (req, res) => {
     //TODO récup les infos depuis la requête
     var user = new User('', '', '', '', '', '');
     userController.del_User(user, (err, result) => {
@@ -97,50 +87,39 @@ app.post('/adminUser', function(req, res) {
         }
     })
 
-
     //res.render('');
 });
 
-app.post('/customer-order', function(req, res) {
-    res.render('customer-order');
+app.post('/admin/manga/add', (req, res) => {
+
 });
 
-app.post('/customer-orders', function(req, res) {
-    res.render('customer-orders');
-});
-
-app.post('/checkout1', function(req, res) {
-    res.render('checkout1');
-});
-
-app.post('/checkout2', function(req, res) {
-    res.render('checkout2');
-});
-
-app.post('/checkout3', function(req, res) {
-    res.render('checkout3');
-});
-
-app.post('/checkout4', function(req, res) {
-    res.render('checkout4');
-});
-
-//--- ANNONCES PAGES FIN ---
-
-app.post('/login', urlencodedparser, function(req, res) {
-    userController.select_authenticateUser(req.body.pseudo, req.body.pwd, (err, User) => {
+app.post('/login', (req, res) => {
+    userController.select_authenticateUser(req.body.identifiant, req.body.pwd, (err, User) => {
         if (err) {
             logger.info(err);
-            res.status(401);
-            res.redirect('/login');
-            res.end;
+            res.status(401).send(err.message);
         } else {
             req.session.user = User;
             logger.info(User.pseudo + " s'est connecté");
-            res.status(200);
-            res.redirect('/index');
-            res.end;
+            res.status(200).send(User);
         }
+    });
+});
+
+app.post('/logout', (req, res) => {
+    req.session.user = undefined;
+    res.status(200).send();
+});
+
+app.get('/:id', function (req, res) {
+    res.render(req.params["id"], { req: req }, (err, file) => {
+        if (err) {
+            console.log(err);
+            res.redirect('404');
+        }
+        else
+            res.send(file);
     });
 });
 

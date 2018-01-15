@@ -68,27 +68,84 @@
 
                             <hr>
 
-                            <form action="customer-orders" method="post">
-                                <div class="form-group">
+                            <form id="form-register" onsubmit="return false;">
+                                <div class="form-group" id="form-group-name">
                                     <label for="name">Nom d'utilisateur</label>
-                                    <input type="text" class="form-control" id="name">
+                                    <input type="text" class="form-control" id="name" onkeyup="validateAll()" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="form-group-email">
                                     <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email">
+                                    <input type="text" class="form-control" id="email" onkeyup="validateEmail()" onfocus="validateEmail()" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="form-group-password">
                                     <label for="password">Mot de passe</label>
-                                    <input type="password" class="form-control" id="password">
+                                    <input type="password" class="form-control" id="password" onkeyup="validateMdp()" onfocus="validateMdp()" required>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="form-group-passwordC">
                                     <label for="password">Confirmer mot de passe</label>
-                                    <input type="password" class="form-control" id="passwordC">
+                                    <input type="password" class="form-control" id="passwordC" onkeyup="validateMdp2()" onfocus="validateMdp2()" required>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>S'enregistrer</button>
+                                    <button type="submit" class="btn btn-primary" id="button-register" onclick="sendRegister()" disabled><i class="fa fa-user-md"></i>S'enregistrer</button>
                                 </div>
                             </form>
+                            <script>
+                                validateEmail = () => {
+                                    var elem = $('#email');
+                                    if(elem.val().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                                        $('#form-group-email').removeClass('has-error').addClass("has-success");
+                                    } else {
+                                        $('#form-group-email').removeClass('has-success').addClass("has-error");
+                                    }
+                                    validateAll();
+                                }
+
+                                validateMdp = () => {
+                                    var elem = $('#password');
+                                    if(elem.val().match(/^[a-zA-Z0-9]{6,18}$/)) {
+                                        $('#form-group-password').removeClass('has-error').addClass("has-success");
+                                    } else {
+                                        $('#form-group-password').removeClass('has-success').addClass("has-error");
+                                    }
+                                    validateAll();
+                                }
+
+                                validateMdp2 = () => {
+                                    var elem = $('#passwordC');
+                                    if(elem.val().match(/^[a-zA-Z0-9]{6,16}$/) && elem.val() == $('#password').val()) {
+                                        $('#form-group-passwordC').removeClass('has-error').addClass("has-success");
+                                    } else {
+                                        $('#form-group-passwordC').removeClass('has-success').addClass("has-error");
+                                    }
+                                    validateAll();
+                                }
+
+                                validateAll = () => {
+                                    $('#button-register').prop('disabled', !($('#name').val() != "" 
+                                    && $('#email').val().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+                                    && $('#password').val().match(/^[a-zA-Z0-9]{6,16}$/) && $('#password').val() == $('#passwordC').val()));
+                                }
+
+                                sendRegister = () => {
+                                    $.ajax({
+                                        'url': '/register',
+                                        'type': 'POST',
+                                        'data': {
+                                            "pseudo": $('#name').val(),
+                                            "email": $('#email').val(),
+                                            "pwd": sha256($('#password').val())
+                                        },
+                                        'complete': xhr => {
+                                            $('.alert-danger').remove();
+                                            if(xhr.status == 200) {
+                                                window.location.replace("/customer-account");
+                                            } else {
+                                                $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-register'));
+                                            }
+                                        }
+                                    });
+                                }
+                            </script>
                         </div>
                     </div>
 
@@ -101,19 +158,39 @@
 
                             <hr>
 
-                            <form action="customer-orders" method="post">
+                            <form id="form-login" onsubmit="return false;">
                                 <div class="form-group">
                                     <label for="name">Nom d'utilisateur</label>
-                                    <input type="text" class="form-control" id="name">
+                                    <input type="text" class="form-control" id="login-name">
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Mot de passe</label>
-                                    <input type="password" class="form-control" id="password">
+                                    <input type="password" class="form-control" id="login-password">
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> Se connecter</button>
+                                    <button type="submit" class="btn btn-primary" onclick="connection()"><i class="fa fa-sign-in"></i> Se connecter</button>
                                 </div>
                             </form>
+                            <script>
+                                    var connection = () => {
+                                        $.ajax({
+                                            'url': '/login',
+                                            'type': 'POST',
+                                            'data': {
+                                                "identifiant": $('#login-name').val(),
+                                                "pwd": sha256($('#login-password').val())                                    
+                                            },
+                                            'complete': xhr => {
+                                                $('.alert-danger').remove();
+                                                if(xhr.status == 200) {
+                                                    window.location.replace("/customer-account");
+                                                } else {
+                                                    $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-login'));
+                                                }
+                                            }
+                                        });
+                                    }
+                                </script>
                         </div>
                     </div>
 
