@@ -24,9 +24,12 @@
     "morgan": "^1.6.1",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.1",
+    "pg": "^7.4.1",
     "promise": "^8.0.1",
+    "properties-reader": "0.0.16",
     "sequelize": "^4.31.0",
     "serve-favicon": "^2.3.0",
+    "string": "^3.3.3",
     "winston": "^2.4.0"
   }
 }

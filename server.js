@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const properties = require('./Utils/properties');
-require('./dbManager');
+const dbManager = require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
-const User = require('./Model/User')
+const User = require('./Model/User');
+const userController = require('./controller/user');
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
 
@@ -34,10 +35,55 @@ app.get('/', function(req, res) {
 
 app.get('/:id', function(req, res) {
     res.render(req.params["id"], {}, (err, file) => {
-        if(err)
+        if (err)
             res.redirect('404');
         else
             res.send(file);
+    });
+});
+
+
+app.post('/register', function(req, res) {
+    //TODO récup les infos depuis la requête
+    var user = new User('', '', '', '', '', '');
+    userController.insert_createUser(user, (err, result) => {
+        if (err) {
+            //TODO
+        } else {
+            //TODO
+        }
+    })
+
+
+    //res.render('');
+});
+
+app.post('/adminUser', function(req, res) {
+    //TODO récup les infos depuis la requête
+    var user = new User('', '', '', '', '', '');
+    userController.del_User(user, (err, result) => {
+        if (err) {
+            res.redirect('/adminManagement')
+            res.end;
+
+        } else {
+            //TODO
+        }
+    })
+
+
+    //res.render('');
+});
+
+app.get('/categorie', function(req, res) {
+    var categorie = [
+        { name: 'Bloody Mary' },
+        { name: 'Martini' },
+        { name: 'Scotch' }
+    ];
+
+    res.render('views/adminManagement', {
+        categorie: categorie
     });
 });
 
@@ -83,7 +129,7 @@ app.listen(1313);
 // ARRET DU SERVEUR
 
 process.on('SIGINT', () => {
-	process.stdout.write("\r\x1b[K");
+    process.stdout.write("\r\x1b[K");
     logger.info(properties.get("console.stop"));
     process.exit(0);
 });
