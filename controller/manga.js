@@ -5,8 +5,7 @@ const logger = require('../Utils/logger').logger_dbManager;
 module.exports = {
 
     insert_addProduct: (Manga, callback) => {
-
-
+        //TODO
     },
 
     select_allCategories: (callback) => {
