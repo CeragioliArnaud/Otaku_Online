@@ -25,6 +25,7 @@
     "promise": "^8.0.1",
     "properties-reader": "0.0.16",
     "sequelize": "^4.31.2",
+    "sha256": "^0.2.0",
     "string": "^3.3.3",
     "winston": "^2.4.0"
   }

@@ -4,8 +4,9 @@ const properties = require('./Utils/properties');
 const dbManager = require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const User = require('./Model/User');
-
+const user = require('./controller/user');
 
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
@@ -18,13 +19,20 @@ app.set('views', __dirname + '/views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public')); // Indique que le dossier /public contient des fichiers statiques (middleware chargé de base)
+app.use(session({
+    secret: "azerty1234",
+    resave: false,
+    saveUninitialized: true
+}));
 
 //--- ANNONCES PAGES DBT ---
 
 app.all('/*', (req, res, next) => {
-    logger.debug('Requête reçue : ' + req.url);
+    logger.debug('Requête reçue (' + (req.session.user ? req.session.user._pseudo : 'anonyme' ) + ') : ' + req.url);
     next();
 });
+
+
 
 app.get('/', function(req, res) {
     res.redirect('/index');
@@ -66,12 +74,20 @@ app.post('/checkout4', function(req, res) {
 //--- ANNONCES PAGES FIN ---
 
 app.post('/login', urlencodedparser, function(req, res) {
-    UName = req.body.username;
-    UPwd = req.body.password;
-    //dbManager.insertUser(UName, UPwd);
-    dbManager.findUser(UName);
-    res.redirect('/index')
-    res.end;
+    user.select_authenticateUser(req.body.pseudo, req.body.pwd, (err,User) => {
+        if(err) {
+            logger.info(err);
+            res.status(401);
+            res.redirect('/login');
+            res.end;
+        } else {
+            req.session.user = User;
+            logger.info(User.pseudo + " s'est connecté");
+            res.status(200);
+            res.redirect('/index');
+            res.end;
+        }
+    });
 });
 
 
