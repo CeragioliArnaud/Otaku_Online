@@ -1,5 +1,6 @@
 <!-- *** TOPBAR ***
  _________________________________________________________ -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <div id="top">
     <div class="container">
         <div class="col-md-6 offer" data-animate="fadeInDown">
@@ -93,19 +94,22 @@ _________________________________________________________ -->
                                     <div class="col-sm-3">
                                         <h5>Catégories</h5>
                                         <!--gerer auto-->
-                                        <ul>
-                                            <li><a href="category">Shonen</a>
-                                            </li>
-                                            <li><a href="category">Shojo</a>
-                                            </li>
-                                            <li><a href="category">Seinen</a>
-                                            </li>
-                                            <li><a href="category">Mature Shojo</a>
-                                            </li>
-                                            <li><a href="category">Gekiga</a>
-                                            </li>
-                                            <li><a href="category">Kodomo </a>
-                                            </li>
+                                        <ul id="listCategories">
+                                            <script>
+                                                $.ajax({ 
+                                                    'url': 'http://127.0.0.1:1313/categories', 
+                                                    'type': 'GET',
+                                                    'success': data => { 
+                                                        try {
+                                                            data.forEach(element => {
+                                                                $('#listCategories').append('<li><a href="category" title="' + element.description + '">' + element.name + "</a>");
+                                                            });
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
+                                                    }
+                                                });
+                                            </script>
                                         </ul>
                                     </div>
                                     <div class="col-sm-3">
@@ -130,12 +134,6 @@ _________________________________________________________ -->
                                         <!--gerer auto-->
                                         <ul>
                                             <li>
-                                                <% drinks.forEach(function(manga) { %>
-                                                    <a href="category">
-                                                        <%= genre.name %> -
-                                                            <%= genre.genre %>
-                                                    </a>
-                                                    <% }); %>
                                             </li>
                                         </ul>
                                     </div>

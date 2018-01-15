@@ -6,6 +6,7 @@ const logger = require('./Utils/logger').logger_server;
 const bodyParser = require('body-parser');
 const User = require('./Model/User');
 const userController = require('./controller/user');
+const mangaController = require('./controller/manga');
 const session = require('express-session');
 
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
@@ -36,6 +37,26 @@ app.all('/*', (req, res, next) => {
 
 app.get('/', function(req, res) {
     res.redirect('/index');
+});
+
+app.get('/adminManagement', function(req, res) {
+    res.render("adminManagement", {}, (err, file) => {
+        if (err) {
+            console.log(err);
+            res.redirect('404');
+        } else
+            res.send(file);
+    });
+});
+
+app.get('/categories', function(req, res) {
+    mangaController.select_allCategories((err, result) => {
+        if(err) {
+            res.status(500).send("Une erreur est survenue");
+        } else {
+            res.status(200).send(result);
+        }
+    })
 });
 
 app.get('/:id', function(req, res) {
@@ -80,18 +101,6 @@ app.post('/adminUser', function(req, res) {
     //res.render('');
 });
 
-app.get('/categorie', function(req, res) {
-    var categorie = [
-        { name: 'Bloody Mary' },
-        { name: 'Martini' },
-        { name: 'Scotch' }
-    ];
-
-    res.render('views/adminManagement', {
-        categorie: categorie
-    });
-});
-
 app.post('/customer-order', function(req, res) {
     res.render('customer-order');
 });
@@ -119,7 +128,7 @@ app.post('/checkout4', function(req, res) {
 //--- ANNONCES PAGES FIN ---
 
 app.post('/login', urlencodedparser, function(req, res) {
-    user.select_authenticateUser(req.body.pseudo, req.body.pwd, (err, User) => {
+    userController.select_authenticateUser(req.body.pseudo, req.body.pwd, (err, User) => {
         if (err) {
             logger.info(err);
             res.status(401);
