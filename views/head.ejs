@@ -1,6 +1,7 @@
 <!-- *** TOPBAR ***
  _________________________________________________________ -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/js/hash.js"></script>
 <div id="top">
     <div class="container">
         <div class="col-md-6 offer" data-animate="fadeInDown">
@@ -9,12 +10,26 @@
         </div>
         <div class="col-md-6" data-animate="fadeInDown">
             <ul class="menu">
-                <li><a href="#" data-toggle="modal" data-target="#login-modal">Connexion</a>
-                </li>
-                <li><a href="register">S'enregistrer</a>
-                </li>
-                <li><a href="contact">Contact</a>
-                </li>
+                <% if(!req.session.user) { %>
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#login-modal">Connexion</a>
+                    </li>
+                    <li>
+                        <a href="register">S'enregistrer</a>
+                    </li>
+                    <% } else { %>
+                        <li>
+                            <a href="customer-account">
+                                <%= req.session.user._pseudo %>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="logout">Se déconnecter</a>
+                        </li>
+                        <% } %>
+                            <li>
+                                <a href="contact">Contact</a>
+                            </li>
             </ul>
         </div>
     </div>
@@ -27,7 +42,7 @@
                     <h4 class="modal-title" id="Login">Identification client</h4>
                 </div>
                 <div class="modal-body">
-                    <form action="login" method="post">
+                    <form id="form-login-modal" onsubmit="return false;">
                         <div class="form-group">
                             <input type="text" class="form-control" id="email-modal" placeholder="email / identifiant">
                         </div>
@@ -36,13 +51,36 @@
                         </div>
 
                         <p class="text-center">
-                            <button class="btn btn-primary"><i class="fa fa-sign-in"></i>Connexion</button>
+                            <button class="btn btn-primary" onclick="connection()">
+                                <i class="fa fa-sign-in"></i>Connexion</button>
                         </p>
-
+                        <script>
+                            var connection = () => {
+                                $.ajax({
+                                    'url': '/login',
+                                    'type': 'POST',
+                                    'data': {
+                                        "identifiant": $('#email-modal').val(),
+                                        "pwd": sha256($('#password-modal').val())
+                                    },
+                                    'complete': xhr => {
+                                        $('.alert-danger').remove();
+                                        if (xhr.status == 200) {
+                                            window.location.replace("/index");
+                                        } else {
+                                            $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-login-modal'));
+                                        }
+                                    }
+                                });
+                            }
+                        </script>
                     </form>
 
                     <p class="text-center text-muted">Pas encore inscrit?</p>
-                    <p class="text-center text-muted"><a href="register"><strong>Inscrivez vous</strong></a>! C'est facile et réalisable en 1&nbsp;minute</p>
+                    <p class="text-center text-muted">
+                        <a href="register">
+                            <strong>Inscrivez vous</strong>
+                        </a>! C'est facile et réalisable en 1&nbsp;minute</p>
 
                 </div>
             </div>
@@ -62,7 +100,8 @@ _________________________________________________________ -->
 
             <a class="navbar-brand home" href="index" data-animate-hover="bounce">
                 <img src="img/logo.png" alt="Obaju logo" class="hidden-xs">
-                <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs"><span class="sr-only">Obaju - go to homepage</span>
+                <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs">
+                <span class="sr-only">Obaju - go to homepage</span>
             </a>
             <div class="navbar-buttons">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
@@ -74,7 +113,8 @@ _________________________________________________________ -->
                     <i class="fa fa-search"></i>
                 </button>
                 <a class="btn btn-default navbar-toggle" href="basket">
-                    <i class="fa fa-shopping-cart"></i> <span class="hidden-xs">X items in cart</span>
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="hidden-xs">X items in cart</span>
                 </a>
             </div>
         </div>
@@ -83,10 +123,13 @@ _________________________________________________________ -->
         <div class="navbar-collapse collapse" id="navigation">
 
             <ul class="nav navbar-nav navbar-left">
-                <li class="active"><a href="index">Accueil</a>
+                <li class="active">
+                    <a href="index">Accueil</a>
                 </li>
                 <li class="dropdown yamm-fw">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mangas<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mangas
+                        <b class="caret"></b>
+                    </a>
                     <ul class="dropdown-menu">
                         <li>
                             <div class="yamm-content">
@@ -97,7 +140,7 @@ _________________________________________________________ -->
                                         <ul id="listCategories">
                                             <script>
                                                 $.ajax({
-                                                    'url': 'http://127.0.0.1:1313/categories',
+                                                    'url': '/categories',
                                                     'type': 'GET',
                                                     'success': data => {
                                                         try {
@@ -115,17 +158,23 @@ _________________________________________________________ -->
                                     <div class="col-sm-3">
                                         <h5>Genres</h5>
                                         <ul>
-                                            <li><a href="category">Fantasy</a>
+                                            <li>
+                                                <a href="category">Fantasy</a>
                                             </li>
-                                            <li><a href="category">Combat</a>
+                                            <li>
+                                                <a href="category">Combat</a>
                                             </li>
-                                            <li><a href="category">Amitié</a>
+                                            <li>
+                                                <a href="category">Amitié</a>
                                             </li>
-                                            <li><a href="category">Detective</a>
+                                            <li>
+                                                <a href="category">Detective</a>
                                             </li>
-                                            <li><a href="category">Ecchi</a>
+                                            <li>
+                                                <a href="category">Ecchi</a>
                                             </li>
-                                            <li><a href="category">Hentai</a>
+                                            <li>
+                                                <a href="category">Hentai</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -145,7 +194,7 @@ _________________________________________________________ -->
                 </li>
 
                 <li class="dropdown yamm-fw">
-                    <a href="customer-order" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
+                    <a href="<%= (req.session.user ? 'customer-account' : 'register') %>" class="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
                 </li>
 
                 <li class="dropdown yamm-fw">
@@ -159,7 +208,10 @@ _________________________________________________________ -->
         <div class="navbar-buttons">
 
             <div class="navbar-collapse collapse right" id="basket-overview">
-                <a href="basket" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span class="hidden-sm">X items in cart</span></a>
+                <a href="basket" class="btn btn-primary navbar-btn">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="hidden-sm">X items in cart</span>
+                </a>
             </div>
             <!--/.nav-collapse -->
 
@@ -179,9 +231,11 @@ _________________________________________________________ -->
                     <input type="text" class="form-control" placeholder="Search">
                     <span class="input-group-btn">
 
-        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i>
+                        </button>
 
-        </span>
+                    </span>
                 </div>
             </form>
 
