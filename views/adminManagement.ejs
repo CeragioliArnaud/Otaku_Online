@@ -12,7 +12,7 @@
     <meta name="keywords" content="">
 
     <title>
-        Obaju : e-commerce template
+        Otaku-Online
     </title>
 
     <meta name="keywords" content="">
@@ -36,7 +36,10 @@
 
     <link rel="shortcut icon" href="favicon.png">
 
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 </head>
 
@@ -87,16 +90,80 @@
                         function hide() {
                             document.getElementsByClassName('selectTitle').style.display = 'none';
                         }
-                    </script>
 
+                        $(function() {
+                            var availableTags = [
+                                "ActionScript",
+                                "AppleScript",
+                                "Asp",
+                                "BASIC",
+                                "C",
+                                "C++",
+                                "Clojure",
+                                "COBOL",
+                                "ColdFusion",
+                                "Erlang",
+                                "Fortran",
+                                "Groovy",
+                                "Haskell",
+                                "Java",
+                                "JavaScript",
+                                "Lisp",
+                                "Perl",
+                                "PHP",
+                                "Python",
+                                "Ruby",
+                                "Scala",
+                                "Scheme"
+                            ];
+
+                            function split(val) {
+                                return val.split(/,\s*/);
+                            }
+
+                            function extractLast(term) {
+                                return split(term).pop();
+                            }
+
+                            $("#tags")
+                                // don't navigate away from the field on tab when selecting an item
+                                .on("keydown", function(event) {
+                                    if (event.keyCode === $.ui.keyCode.TAB &&
+                                        $(this).autocomplete("instance").menu.active) {
+                                        event.preventDefault();
+                                    }
+                                })
+                                .autocomplete({
+                                    minLength: 0,
+                                    source: function(request, response) {
+                                        // delegate back to autocomplete, but extract the last term
+                                        response($.ui.autocomplete.filter(
+                                            availableTags, extractLast(request.term)));
+                                    },
+                                    focus: function() {
+                                        // prevent value inserted on focus
+                                        return false;
+                                    },
+                                    select: function(event, ui) {
+                                        var terms = split(this.value);
+                                        // remove the current input
+                                        terms.pop();
+                                        // add the selected item
+                                        terms.push(ui.item.value);
+                                        // add placeholder to get the comma-and-space at the end
+                                        terms.push("");
+                                        this.value = terms.join(", ");
+                                        return false;
+                                    }
+                                });
+                        });
+                    </script>
+                    <!--UTILISATEURS-->
                     <div class="col-md-6">
                         <div class="box">
-                            <h1>Gestion des paramètres</h1>
-
-                            <p class="lead">Admin section </p>
+                            <h1>Gestion des utilisateurs</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <p>Utilisateurs</p>
                             <form action="adminUser" method="post">
                                 <div class="form-group">
                                     <label for="name">Nom d'utilisateur</label>
@@ -106,69 +173,133 @@
                                 <div id="mainselection" class="form-group">
                                     <select onchange="hide()" autofocus>
                                       <option class="selectTitle">Choisissez un utilisateur</option>
-                                        <% user.forEach(function(user) { %>
-                                        <option><%= user.name %></option>
-                                        <% }); %>
+                                        <%# user.forEach(function(user) { %>
+                                        <option><%#= user.name %></option>
+                                        <%# }); %>
                                     </select>
                                 </div>
-                                <p>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>Blocker</button>
-                                    </div>
 
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>Administrifier</button>
-                                    </div>
-                                </p>
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="Block"></i>Blocker</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="Adminis"></i>Administrifier</button>
+                                </div>
+
                             </form>
                             <hr>
-                            <p>Catégories</p>
+
+                        </div>
+                    </div>
+                    <!--CATEGORIES-->
+                    <div class="col-md-6">
+                        <div class="box">
+                            <h1>Gestion des catégories</h1>
+                            <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
+                            <hr>
                             <form action="/adminCateg" method="post">
                                 <div class="form-group">
                                     <label for="name">Catégories</label>
                                     <input type="text" class="form-control" id="name">
 
                                 </div>
-                                <p>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>Ajouter</button>
-                                    </div>
-
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>Supprimer</button>
-                                    </div>
-                                </p>
+                                <hr>
 
                                 <div id="mainselection" class="form-group">
                                     <select onchange="hide()">
                                       <option class="selectTitle">Choisissez une catégorie</option>
-                                        <% categorie.forEach(function(categorie) { %>
-                                            <option><%= categorie.name %></option>
-                                        <% }); %>
+                                        <%# categorie.forEach(function(categorie) { %>
+                                            <option><%#= categorie.name %></option>
+                                        <%# }); %>
                                     </select>
                                 </div>
 
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>+</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="AddCat"></i>Ajouter</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="DelCat"></i>Supprimer</button>
                                 </div>
-
-                                <!--
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="text" class="form-control" id="email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Mot de passe</label>
-                                    <input type="password" class="form-control" id="password">
-                                </div>
-                                <div class="form-group">
-                                    <label for="password">Confirmer mot de passe</label>
-                                    <input type="password" class="form-control" id="passwordC">
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md"></i>S'enregistrer</button>
-                                </div>-->
                             </form>
+                            <hr>
+
+                        </div>
+                    </div>
+                    <!--PRODUITS-->
+                    <div class="col-md-6">
+                        <div class="box" style="width: 205%;">
+                            <h1>Gestion des produits</h1>
+                            <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
+                            <hr>
+                            <form action="/adminProd" method="post">
+                                <!--REFERENCE-->
+                                <div class="form-group">
+                                    <label for="ref">Reference</label>
+                                    <input type="text" class="form-control" id="ref">
+                                </div>
+                                <hr>
+                                <!--TITRE-->
+                                <div class="form-group">
+                                    <label for="name">Titre</label>
+                                    <input type="text" class="form-control" id="titre">
+                                </div>
+                                <hr>
+                                <!--N° VOLUME-->
+                                <div class="form-group">
+                                    <label for="number">N° du volume</label>
+                                    <input type="number" class="form-control" id="volume">
+                                </div>
+                                <hr>
+                                <!--DESCRIPTION-->
+                                <div class="form-group">
+                                    <label for="name">Description</label>
+
+                                </div><textarea name="texte1" cols="149" rows="5" id="descri"></textarea>
+                                <hr>
+                                <!--CATEGORIES-->
+                                <div id="mainselection" class="form-group">
+                                    <select onchange="hide()">
+                                      <option class="selectTitle">Choisissez une catégorie</option>
+                                        <%# categorie.forEach(function(categorie) { %>
+                                            <option><%#= categorie.name %></option>
+                                        <%# }); %>
+                                    </select>
+                                </div>
+                                <hr>
+                                <!--DATE-->
+                                <div class="form-group">
+                                    <label for="date">Date de publication</label>
+                                    <input id="date" type="date" class="form-control">
+                                </div>
+                                <hr>
+                                <!--PRIX-->
+                                <div class="form-group">
+                                    <label for="number">Prix</label>
+                                    <input id="prix" type="number" class="form-control">
+                                </div>
+                                <hr>
+                                <!--STUDIO DE PUBLICATION-->
+                                <div class="form-group">
+                                    <label for="number">Prix</label>
+                                    <input id="prix" type="number" class="form-control">
+                                </div>
+                                <hr>
+                                <!--MANGAKA
+                                <div class="form-group">
+                                    <label for="number">Prix</label>
+                                    <input id="prix" type="number" class="form-control">
+                                </div>
+                                <hr>
+                                <!--GENRES-->
+                                <div class="ui-widget">
+                                    <label for="tags">Tag programming languages: </label>
+                                    <input id="tags" size="50">
+                                </div>
+                                <hr>
+                                <!--BOUTONS-->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="AddCat"></i>Ajouter</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="DelCat"></i>Supprimer</button>
+                                </div>
+                            </form>
+                            <hr>
+
                         </div>
                     </div>
 
@@ -183,9 +314,6 @@
         </div>
         <!-- /#all -->
 
-
-
-
         <!-- *** SCRIPTS TO INCLUDE ***
  _________________________________________________________ -->
         <script src="js/jquery-1.11.0.min.js"></script>
@@ -197,8 +325,6 @@
         <script src="js/owl.carousel.min.js"></script>
         <script src="js/front.js"></script>
 
-
-
 </body>
 
-</html>
+</html

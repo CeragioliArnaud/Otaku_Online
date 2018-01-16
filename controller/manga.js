@@ -44,7 +44,7 @@ module.exports = {
     },
 
     select_allCategories: (callback) => {
-        (async () => {
+        (async() => {
             try {
                 logger.info("Requête demandée : select_allCategories()");
                 const result = await pool.query("SELECT name, description FROM categorie");

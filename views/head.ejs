@@ -17,19 +17,19 @@
                     <li>
                         <a href="register">S'enregistrer</a>
                     </li>
-                <% } else { %>
-                    <li>
-                        <a href="customer-account">
-                            <%= req.session.user._pseudo %>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="logout">Se déconnecter</a>
-                    </li>
-                <% } %>
-                <li>
-                    <a href="contact">Contact</a>
-                </li>
+                    <% } else { %>
+                        <li>
+                            <a href="customer-account">
+                                <%= req.session.user._pseudo %>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="logout">Se déconnecter</a>
+                        </li>
+                        <% } %>
+                            <li>
+                                <a href="contact">Contact</a>
+                            </li>
             </ul>
         </div>
     </div>
@@ -61,11 +61,11 @@
                                     'type': 'POST',
                                     'data': {
                                         "identifiant": $('#email-modal').val(),
-                                        "pwd": sha256($('#password-modal').val())                                    
+                                        "pwd": sha256($('#password-modal').val())
                                     },
                                     'complete': xhr => {
                                         $('.alert-danger').remove();
-                                        if(xhr.status == 200) {
+                                        if (xhr.status == 200) {
                                             window.location.replace("/index");
                                         } else {
                                             $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-login-modal'));
