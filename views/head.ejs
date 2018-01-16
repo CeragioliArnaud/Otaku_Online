@@ -96,10 +96,10 @@ _________________________________________________________ -->
                                         <!--gerer auto-->
                                         <ul id="listCategories">
                                             <script>
-                                                $.ajax({ 
-                                                    'url': 'http://127.0.0.1:1313/categories', 
+                                                $.ajax({
+                                                    'url': 'http://127.0.0.1:1313/categories',
                                                     'type': 'GET',
-                                                    'success': data => { 
+                                                    'success': data => {
                                                         try {
                                                             data.forEach(element => {
                                                                 $('#listCategories').append('<li><a href="category" title="' + element.description + '">' + element.name + "</a>");
