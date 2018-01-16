@@ -64,7 +64,7 @@ app.all('/admin/*', (req, res, next) => {
     if (req.session.user && req.session.user._isAdmin) {
         next();
     } else {
-        res.redirect('/404');
+        res.redirect(404, '/404');
     }
 });
 
@@ -93,8 +93,12 @@ app.post('/admin/manga/add', (req, res) => {
 });
 
 app.post('/admin/manga/getById/:id', (req, res) => {
-    mangaController.select_mangaById(req.params["id"], (err, ) => {
-        
+    mangaController.select_mangaById(req.params["id"], (err, result) => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send(result);
+        }
     });
 });
 
@@ -120,7 +124,7 @@ app.get('/:id', function (req, res) {
     res.render(req.params["id"], { req: req }, (err, file) => {
         if (err) {
             console.log(err);
-            res.redirect('404');
+            res.redirect(404, '404');
         }
         else
             res.send(file);

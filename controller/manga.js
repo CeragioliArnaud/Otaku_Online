@@ -23,12 +23,12 @@ module.exports = {
                                 "INNER JOIN publisher pu on(p.publisher = pu.id) " +
                                 "INNER JOIN mangaka m on(p.mangaka = m.id) " +
                                 "WHERE p.id = $1";
-                const result = await pool.query();
+                const result = await pool.query(query, [id]);
                 if(result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("L'id du produit n'a pas été trouvé")) : new Error("L'id du produit n'a pas été trouvé"));
                 } else {
                     var line = result.rows[0];
-                    var manga = new Manga(line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher, line.mangaka_last_name + " " + line.mangaka_first_name, lines.genres);
+                    var manga = new Manga(line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher, line.mangaka_last_name + " " + line.mangaka_first_name, line.genres);
                     manga.id = line.id;
                     Object.freeze(manga);
                     return (utils.isCallback(callback) ? callback(undefined, manga) : manga);
