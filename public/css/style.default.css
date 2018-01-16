@@ -888,6 +888,10 @@ h1 {
 #footer {
   background: #e0e0e0;
   padding: 20px 0;
+  margin-top: 40px;
+  position: absolute;
+  width: 100%;
+  bottom: 57px;
 }
 #footer ul {
   padding-left: 0;
@@ -939,6 +943,9 @@ h1 {
   color: #ccc;
   padding: 20px 0;
   font-size: 12px;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
 #copyright p {
   margin: 0;

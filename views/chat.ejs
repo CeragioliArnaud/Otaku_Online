@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Obaju e-commerce template">
+    <meta name="author" content="Ondrej Svestka | ondrejsvestka.cz">
+    <meta name="keywords" content="">
+
+    <title>
+        Obaju : e-commerce template
+    </title>
+
+    <meta name="keywords" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
+
+    <!-- styles -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/owl.carousel.css" rel="stylesheet">
+    <link href="css/owl.theme.css" rel="stylesheet">
+
+    <!-- theme stylesheet -->
+    <link href="css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+
+    <!-- your stylesheet with modifications -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/respond.min.js"></script>
+
+    <link rel="shortcut icon" href="favicon.png">
+
+
+
+</head>
+
+<body>
+
+    <% include head %>
+
+        <div id="all">
+
+            <div id="content">
+                <div class="container">
+                    <ul id="messages"></ul>
+
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+                    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+                    <script> 
+                        var socket = io.connect("http://91.121.66.187:443");
+                        $(function () {
+                            socket.on('histo', historique => {
+                                historique.forEach(msg => {
+                                    $('#messages').append($('<li>').text(msg.author + " : " + msg.text));
+                                });
+                            });
+                            socket.on('chat message', msg => {
+                                $('#messages').append($('<li>').text(msg.author + " : " + msg.text));
+                                window.scrollTo(0, document.body.scrollHeight);
+                            });
+                        });
+                    </script>
+
+                    <form action "">
+                        <% if(req.session.user) { %>
+                            <input id="m" autocomplete="off" />
+                            <button>Envoyer</button>
+                            <script> 
+                                $(function () {
+                                    var author = "<%= req.session.user._pseudo %>";
+                                    $('form').submit(() => {
+                                        socket.emit('chat message', { "author": author, "text": $('#m').val() });
+                                        $('#m').val('');
+                                        return false;
+                                    });
+                                });
+                            </script>
+                        <% } else { %>
+                            <input id="m" autocomplete="off" placeholder="Vous devez être connecté pour parler" disabled/>
+                            <button disabled>Envoyer</button>
+                        <% } %>
+                    </form>
+                </div>
+                <!-- /.container -->
+            </div>
+            <!-- /#content -->
+            <% include foot %>
+        </div>
+        <!-- /#all -->
+
+
+
+
+        <!-- *** SCRIPTS TO INCLUDE ***
+_________________________________________________________ -->
+        <script src="js/jquery-1.11.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/waypoints.min.js"></script>
+        <script src="js/modernizr.js"></script>
+        <script src="js/bootstrap-hover-dropdown.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/front.js"></script>
+
+
+
+
+</body>
+
+</html>

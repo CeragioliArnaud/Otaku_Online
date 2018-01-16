@@ -3,8 +3,9 @@ module.exports = class Manga {
 
     /**   CONSTRUCTORS   */
 
-	constructor(reference, title, volumeNumber, description, categorie, publishDate, price, publisher, mangaka, genres) {
-		this._reference = reference;
+	constructor(id, reference, title, volumeNumber, description, categorie, publishDate, price, publisher, mangaka, genres, images) {
+        this._id = id;
+        this._reference = reference;
 		this._title = title;
 		this._volumeNumber = volumeNumber;
 		this._description = description;
@@ -14,10 +15,13 @@ module.exports = class Manga {
 		this._publisher = publisher;
 		this._mangaka = mangaka;
 		this._genres = genres;
+		this._images = images;
     }
     
 
     /**   GETTERS   **/
+
+	get id() { return this._id; }
 
 	get reference() { return this._reference; }
 
@@ -38,4 +42,6 @@ module.exports = class Manga {
 	get mangaka() { return this._mangaka; }
 
     get genres() { return this._genres; }
+
+    get images() { return this._images; }
 }
