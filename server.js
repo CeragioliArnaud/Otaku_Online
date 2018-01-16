@@ -54,12 +54,10 @@ app.post('/register', (req, res) => {
         if (err) {
             res.status(500).send(err.message);
         } else {
-            res.status(200).send(result);
+            req.session.user = result;
+            res.status(200).send();
         }
     })
-
-
-    //res.render('');
 });
 
 app.all('/admin/*', (req, res, next) => {
@@ -92,6 +90,12 @@ app.post('/admin/user', (req, res) => {
 
 app.post('/admin/manga/add', (req, res) => {
 
+});
+
+app.post('/admin/manga/getById/:id', (req, res) => {
+    mangaController.select_mangaById(req.params["id"], (err, ) => {
+        
+    });
 });
 
 app.post('/login', (req, res) => {
