@@ -66,6 +66,16 @@ app.get('/categories', (req, res) => {
     })
 });
 
+app.get('/mangas', (req, res) => {
+    mangaController.select_allMangas((err, result) => {
+        if (err) {
+            res.status(500).send("Une erreur est survenue");
+        } else {
+            res.status(200).send(result);
+        }
+    })
+});
+
 app.post('/register', (req, res) => {
     var user = new User("", "", req.body.pseudo, req.body.email, "", req.body.pwd);
     userController.insert_createUser(user, (err, result) => {
@@ -76,6 +86,20 @@ app.post('/register', (req, res) => {
             res.status(200).send();
         }
     })
+});
+
+app.post('/updatePwd', (req, res) => {
+    if (req.session.user) {
+        userController.update_changePwd(req.session.user._pseudo, req.body.oldPwd, req.body.newPwd, (err, result) => {
+            if (err) {
+                res.status(500).send(err.message);
+            } else {
+                res.status(200).send();
+            }
+        })
+    } else {
+        res.status(401).send();
+    }
 });
 
 app.all('/admin/*', (req, res, next) => {
@@ -109,7 +133,7 @@ app.post('/admin/user', (req, res) => {
 app.post('/admin/user/block', function(req, res) {
     userController.update_suspendUser(req.body.identifiant, err => {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send(err.message);
         } else {
             res.status(200).send();
         }
@@ -117,9 +141,9 @@ app.post('/admin/user/block', function(req, res) {
 })
 
 app.post('/admin/user/administer', function(req, res) {
-    userController.update_suspendUser(req.body.identifiant, err => {
+    userController.update_administerUser(req.body.identifiant, err => {
         if (err) {
-            res.status(500).send(err);
+            res.status(500).send(err.message);
         } else {
             res.status(200).send();
         }
@@ -165,8 +189,7 @@ app.get('/admin/manga/getById/:id', (req, res) => {
 });
 
 app.get('/admin/:id', function(req, res) {
-    console.log("REQUETE => " + __dirname + '/views/admin' + req.params["id"]);
-    res.render(__dirname + '/views/admin/' + req.params["id"], { req: req }, (err, file) => {
+    res.render('admin_' + req.params["id"], { req: req }, (err, file) => {
         if (err) {
             console.log("ERREUR ICI => " + err);
             res.redirect('../404');
@@ -193,6 +216,14 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
     req.session.user = undefined;
     res.status(200).send();
+});
+
+app.get('/customer-*', (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.status(404).redirect('/register');
+    }
 });
 
 app.get('/:id', function(req, res) {

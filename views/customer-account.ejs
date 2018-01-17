@@ -53,7 +53,7 @@
                         <ul class="breadcrumb">
                             <li><a href="#">Home</a>
                             </li>
-                            <li>My account</li>
+                            <li>Mon compte</li>
                         </ul>
 
                     </div>
@@ -77,6 +77,7 @@
                                         <a href="customer-orders"><i class="fa fa-list"></i> Mes commandes</a>
                                     </li>
                                     <li>
+
                                         <a href="customer-wishlist" disabled><i class="fa fa-heart"></i> Ma wishlist</a>
                                     </li>
                                     <li>
@@ -93,13 +94,13 @@
 
                     <div class="col-md-9">
                         <div class="box">
-                            <h1>My account</h1>
+                            <h1><%= req.session.user._pseudo %></h1>
                             <p class="lead">Change your personal details or your password here.</p>
                             <p class="text-muted">Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
 
                             <h3>Change password</h3>
 
-                            <form>
+                            <form id="form-changePwd" onsubmit="return false;">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -110,22 +111,71 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="form-group-password_1">
                                             <label for="password_1">New password</label>
-                                            <input type="password" class="form-control" id="password_1">
+                                            <input type="password" class="form-control" id="password_1" onkeyup="validateMdp()" onfocus="validateMdp()">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="form-group-password_2">
                                             <label for="password_2">Retype new password</label>
-                                            <input type="password" class="form-control" id="password_2">
+                                            <input type="password" class="form-control" id="password_2" onkeyup="validateMdp2()" onfocus="validateMdp2()">
                                         </div>
                                     </div>
                                 </div>
+                                <script>
+                                    validateMdp = () => {
+                                        var elem = $('#password_1');
+                                        if(elem.val().match(/^[a-zA-Z0-9]{6,18}$/)) {
+                                            $('#form-group-password_1').removeClass('has-error').addClass("has-success");
+                                        } else {
+                                            $('#form-group-password_1').removeClass('has-success').addClass("has-error");
+                                        }
+                                        validateAll();
+                                    }
+    
+                                    validateMdp2 = () => {
+                                        var elem = $('#password_2');
+                                        if(elem.val().match(/^[a-zA-Z0-9]{6,18}$/) && elem.val() == $('#password_1').val()) {
+                                            $('#form-group-password_2').removeClass('has-error').addClass("has-success");
+                                        } else {
+                                            $('#form-group-password_2').removeClass('has-success').addClass("has-error");
+                                        }
+                                        validateAll();
+                                    }
+    
+                                    validateAll = () => {
+                                        $('#button-updatePwd').prop('disabled', 
+                                            !($('#password_old').val() != "" && 
+                                            $('#password_1').val().match(/^[a-zA-Z0-9]{6,18}$/) && 
+                                            $('#password_1').val() == $('#password_2').val())
+                                        );
+                                    }
+    
+                                    changePassword = () => {
+                                        $.ajax({
+                                            'url': '/updatePwd',
+                                            'type': 'POST',
+                                            'data': {
+                                                "oldPwd": sha256($('#password_old').val()),
+                                                "newPwd": sha256($('#password_1').val())
+                                            },
+                                            'complete': xhr => {
+                                                $('.alert-success').remove();
+                                                $('.alert-danger').remove();
+                                                if(xhr.status == 200) {
+                                                    $('<div>').text("Nouveau mot de passe enregistré").attr("class", "alert alert-success alert-email-email").insertBefore($('#form-changePwd'));
+                                                } else {
+                                                    $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-changePwd'));
+                                                }
+                                            }
+                                        });
+                                    }
+                                </script>
                                 <!-- /.row -->
 
                                 <div class="col-sm-12 text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save new password</button>
+                                    <button type="submit" id="button-updatePwd" class="btn btn-primary" onclick="changePassword()" disabled><i class="fa fa-save"></i> Save new password</button>
                                 </div>
                             </form>
 
@@ -137,60 +187,19 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="firstname">Firstname</label>
-                                            <input type="text" class="form-control" id="firstname">
+                                            <input type="text" class="form-control" id="firstname" value="<%= req.session.user._first_name %>">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="lastname">Lastname</label>
-                                            <input type="text" class="form-control" id="lastname">
+                                            <input type="text" class="form-control" id="lastname" value="<%= req.session.user._last_name %>">
                                         </div>
                                     </div>
                                 </div>
                                 <!-- /.row -->
 
                                 <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="company">Company</label>
-                                            <input type="text" class="form-control" id="company">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="street">Street</label>
-                                            <input type="text" class="form-control" id="street">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-
-                                <div class="row">
-                                    <div class="col-sm-6 col-md-3">
-                                        <div class="form-group">
-                                            <label for="city">Company</label>
-                                            <input type="text" class="form-control" id="city">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-3">
-                                        <div class="form-group">
-                                            <label for="zip">ZIP</label>
-                                            <input type="text" class="form-control" id="zip">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-3">
-                                        <div class="form-group">
-                                            <label for="state">State</label>
-                                            <select class="form-control" id="state"></select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-md-3">
-                                        <div class="form-group">
-                                            <label for="country">Country</label>
-                                            <select class="form-control" id="country"></select>
-                                        </div>
-                                    </div>
-
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="phone">Telephone</label>
@@ -200,7 +209,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email">
+                                            <input type="text" class="form-control" id="email" value="<%= req.session.user._email %>">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 text-center">

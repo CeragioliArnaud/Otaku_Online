@@ -27,7 +27,7 @@
                             <a href="logout">Se déconnecter</a>
                         </li>
                         <li>
-                            <a href="admin/adminManagement">Gestion</a>
+                            <a href="admin/management">Gestion</a>
                         </li>
                         <% } else { %>
                             <li>
@@ -206,7 +206,7 @@ _________________________________________________________ -->
                 </li>
 
                 <li class="dropdown yamm-fw">
-                    <a href="<%= (req.session.user ? 'customer-account' : 'register') %>" class="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
+                    <a href="customer-account" class="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
                 </li>
 
                 <li class="dropdown yamm-fw">

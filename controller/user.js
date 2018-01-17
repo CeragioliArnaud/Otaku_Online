@@ -92,8 +92,9 @@ module.exports = {
         (async() => {
             try {
                 logger.info("Requête demandée : update_suspendUser(" + login + ")");
-                const query = "UPDATE users SET state='SUSP' WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1";
-                const result = await client.query(query, [login]);
+
+                const query = "UPDATE users SET state='SUSP' WHERE " + (utils.isEmail(login) ? "email" : "pseudo") + "=$1 RETURNING *";
+                const result = await pool.query(query, [login]);
 
                 if (result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("Aucun utilisateur trouvé avec cet identifiant")) : new Error("Aucun utilisateur trouvé avec cet identifiant"));
@@ -105,17 +106,18 @@ module.exports = {
                 }
             } catch (e) {
                 logger.error("Echec de la requête update_suspendUser(" + login + ") : " + e.message)
-                throw e;
+                return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue.")) : new Error("Une erreur est survenue."));
             }
-        })().catch(e => logger.error(e.message))
+        })()
     },
 
     update_administerUser: (login, callback) => {
         (async() => {
             try {
-                logger.info("Requête demandée : update_suspendUser(" + login + ")");
-                const query = "UPDATE users SET state='ADMIN' WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1";
-                const result = await client.query(query, [login]);
+                logger.info("Requête demandée : update_administerUser(" + login + ")");
+
+                const query = "UPDATE users SET state='ADMI' WHERE " + (utils.isEmail(login) ? "email" : "pseudo") + "=$1 RETURNING *";
+                const result = await pool.query(query, [login]);
 
                 if (result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("Aucun utilisateur trouvé avec cet identifiant")) : new Error("Aucun utilisateur trouvé avec cet identifiant"));
@@ -126,9 +128,41 @@ module.exports = {
                         return;
                 }
             } catch (e) {
-                logger.error("Echec de la requête update_administerUser(" + login + ") : " + e.message)
-                throw e;
+                logger.error("Echec de la requête update_administerUser(" + login + ") : " + e.message);
+                return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue.")) : new Error("Une erreur est survenue."));
             }
-        })().catch(e => logger.error(e.message))
+        })()
+    },
+
+    update_changePwd: (pseudo, oldPwd, newPwd, callback) => {
+        (async() => {
+            try {
+                logger.info("Requête demandée : update_changePwd(" + pseudo + ")");
+
+                const query0 = "SELECT id FROM users WHERE pseudo=$1 AND pwd=$2";
+                const result0 = await pool.query(query0, [pseudo, oldPwd]);
+
+                console.log(JSON.stringify(result0));
+                if (result0.rowCount == 0) {
+                    return (utils.isCallback(callback) ? callback(new Error("Ancien mot de passe incorrect")) : new Error("Ancien mot de passe incorrect"));
+                }
+
+                console.log("pseudo : " + pseudo + " / " + oldPwd + " / " + newPwd);
+                const query1 = "UPDATE users SET pwd=$2 WHERE id=$1 RETURNING *";
+                const result1 = await pool.query(query1, [result0.rows[0].id, newPwd]);
+
+                if (result1.rowCount == 0) {
+                    return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue.")) : new Error("Une erreur est survenue."));
+                } else {
+                    if (utils.isCallback(callback))
+                        return callback();
+                    else
+                        return;
+                }
+            } catch (e) {
+                logger.error("Echec de la requête update_administerUser(" + pseudo + ") : " + e.message);
+                return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue.")) : new Error("Une erreur est survenue."));
+            }
+        })()
     }
 }

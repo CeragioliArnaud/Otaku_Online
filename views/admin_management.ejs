@@ -20,19 +20,19 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
 
     <!-- styles -->
-    <link href="../css/font-awesome.css" rel="stylesheet">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/animate.min.css" rel="stylesheet">
-    <link href="../css/owl.carousel.css" rel="stylesheet">
-    <link href="../css/owl.theme.css" rel="stylesheet">
+    <link href="/css/font-awesome.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/animate.min.css" rel="stylesheet">
+    <link href="/css/owl.carousel.css" rel="stylesheet">
+    <link href="/css/owl.theme.css" rel="stylesheet">
 
     <!-- theme stylesheet -->
-    <link href="../css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+    <link href="/css/style.default.css" rel="stylesheet" id="theme-stylesheet">
 
     <!-- your stylesheet with modifications -->
-    <link href="../css/custom.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
 
-    <script src="../js/respond.min.js"></script>
+    <script src="/js/respond.min.js"></script>
 
     <link rel="shortcut icon" href="favicon.png">
 
@@ -44,7 +44,7 @@
 </head>
 
 <body>
-    <% include ../head %>
+    <% include head %>
 
         <style>
             #mainSelection3 select {
@@ -164,16 +164,11 @@
                             <h1>Gestion des utilisateurs</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <form onsubmit="return false;">
+                            <form id="gestion-user" onsubmit="return false;">
                                 <div class="ui-widget">
-                                    <label for="tags-test">Tags: </label>
-                                    <input id="tags-test">
+                                    <label for="tags-user">Nom d'utilisateur</label>
+                                    <input type="text" class="form-control" id="tags-user">
                                 </div>
-                                <!--
-                                <div class="form-group">
-                                    <label for="name">Nom d'utilisateur</label>
-                                    <input type="text" class="form-control" id="nameUser">
-                                </div>-->
                                 <hr>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary" onclick="block()"><i class="fa fa-user-md" value="Block" id="BlockButton"></i>Blocker</button>
@@ -183,14 +178,15 @@
                                                 'url': '/admin/user/block',
                                                 'type': 'POST',
                                                 'data': {
-                                                    "identifiant": $('#nameUser').val()
+                                                    "identifiant": $('#tags-user').val()
                                                 },
                                                 'complete': xhr => {
                                                     $('.alert-danger').remove();
+                                                    $('.alert-success').remove();
                                                     if (xhr.status == 200) {
-                                                        window.location.replace("/admin/adminManagemnt");
+                                                        $('<div>').text("L'utilisateur est désormais bloqué.").attr("class", "alert alert-success alert-email-email").insertBefore($('#gestion-user'));
                                                     } else {
-                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertAfter($('#BlockButton'));
+                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#gestion-user'));
                                                     }
                                                 }
                                             });
@@ -203,14 +199,15 @@
                                                 'url': '/admin/user/administer',
                                                 'type': 'POST',
                                                 'data': {
-                                                    "identifiant": $('#email-modal').val()
+                                                    "identifiant": $('#tags-user').val()
                                                 },
                                                 'complete': xhr => {
                                                     $('.alert-danger').remove();
+                                                    $('.alert-success').remove();
                                                     if (xhr.status == 200) {
-                                                        window.location.replace("/index");
+                                                        $('<div>').text("L'utilisateur est désormais Administrateur.").attr("class", "alert alert-success alert-email-email").insertBefore($('#gestion-user'));
                                                     } else {
-                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#AdministerButton'));
+                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#gestion-user'));
                                                     }
                                                 }
                                             });
@@ -417,21 +414,21 @@
             </div>
             <!-- /#content -->
 
-            <% include ../foot %>
+            <% include foot %>
 
         </div>
         <!-- /#all -->
 
         <!-- *** SCRIPTS TO INCLUDE ***
  _________________________________________________________ -->
-        <script src="../js/jquery-1.11.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/jquery.cookie.js"></script>
-        <script src="../js/waypoints.min.js"></script>
-        <script src="../js/modernizr.js"></script>
-        <script src="../js/bootstrap-hover-dropdown.js"></script>
-        <script src="../js/owl.carousel.min.js"></script>
-        <script src="../js/front.js"></script>
+        <script src="/js/jquery-1.11.0.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/jquery.cookie.js"></script>
+        <script src="/js/waypoints.min.js"></script>
+        <script src="/js/modernizr.js"></script>
+        <script src="/js/bootstrap-hover-dropdown.js"></script>
+        <script src="/js/owl.carousel.min.js"></script>
+        <script src="/js/front.js"></script>
 
 </body>
 

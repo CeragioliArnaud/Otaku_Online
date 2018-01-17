@@ -103,6 +103,22 @@ module.exports = {
         })();
     },
 
+    select_allMangas: (callback) => {
+        (async() => {
+            try {
+                logger.info("Requête demandée : select_allMangas()");
+                const query = "SELECT p.id, p.reference, p.title, p.volume_number, p.price, c.name as categorie, p.images[1]" +
+                    "FROM product p " +
+                    "INNER JOIN categorie c on(p.categorie = c.id)";
+                const result = await pool.query(query);
+                return (utils.isCallback(callback) ? callback(undefined, result.rows) : result.rows);
+            } catch (e) {
+                logger.error("Echec de la requête 'select_allMangas' : " + e.message)
+                return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue, réessayez ulterieurement")) : new Error("Une erreur est survenue, réessayez ulterieurement"));
+            }
+        })();
+    },
+
     select_mangaById: (id, callback) => {
         (async() => {
             try {
@@ -123,7 +139,7 @@ module.exports = {
                     return (utils.isCallback(callback) ? callback(new Error("L'id du produit n'a pas été trouvé")) : new Error("L'id du produit n'a pas été trouvé"));
                 } else {
                     var line = result.rows[0];
-                    var manga = new Manga(line.id, line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher, line.mangaka_last_name + " " + line.mangaka_first_name, line.genres, line.images);
+                    var manga = new Manga(line.id, line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher_name, line.mangaka_last_name + " " + line.mangaka_first_name, line.genres, line.images);
                     Object.freeze(manga);
                     return (utils.isCallback(callback) ? callback(undefined, manga) : manga);
                 }
