@@ -14,7 +14,6 @@ module.exports = {
 			try {
 				properties.set(key, value);
 			} catch (e) {
-				//TODO Gestion erreur
 			}
 		}
 	}

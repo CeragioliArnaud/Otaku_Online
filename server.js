@@ -1,14 +1,18 @@
+const http = require('http');
 const express = require('express');
 const app = express();
 const properties = require('./Utils/properties');
 const dbManager = require('./dbManager');
 const logger = require('./Utils/logger').logger_server;
+const S = require('string');
 const utils = require('./Utils/functionsUtils');
 const bodyParser = require('body-parser');
 const User = require('./Model/User');
+const Manga = require('./Model/Manga');
 const userController = require('./controller/user');
 const mangaController = require('./controller/manga');
 const session = require('express-session');
+const io = require('socket.io').listen(properties.get('socket.port'));
 
 var urlencodedparser = bodyParser.urlencoded({ extended: false });
 // config
@@ -26,6 +30,20 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+
+/****************
+ *				*
+ *   Connexion   *
+ *   Socket.io   *
+ *				*
+ ****************/
+
+io.on('connection', socket => {
+    socket.on('chat message', msg => {
+        io.emit('chat message', msg);
+    });
+});
 
 //--- ANNONCES PAGES DBT ---
 
@@ -54,19 +72,17 @@ app.post('/register', (req, res) => {
         if (err) {
             res.status(500).send(err.message);
         } else {
-            res.status(200).send(result);
+            req.session.user = result;
+            res.status(200).send();
         }
     })
-
-
-    //res.render('');
 });
 
 app.all('/admin/*', (req, res, next) => {
     if (req.session.user && req.session.user._isAdmin) {
         next();
     } else {
-        res.redirect('/404');
+        res.status(404).redirect('/404');
     }
 });
 
@@ -114,6 +130,40 @@ app.post('/admin/manga/add', (req, res) => {
 
 });
 
+app.post('/admin/manga/modify', (req, res) => {
+    var manga = new Manga(
+        req.body.id,
+        req.body.reference,
+        req.body.title,
+        req.body.volume_Number,
+        req.body.description,
+        req.body.categorie,
+        req.body.publish_date,
+        req.body.price,
+        req.body.publisher,
+        req.body.mangaka,
+        "", // TODO ? Non géré dans la requêtes sql....
+        req.body.images
+    );
+    mangaController.update_modifyProduct(manga, err => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send();
+        }
+    })
+});
+
+app.get('/admin/manga/getById/:id', (req, res) => {
+    mangaController.select_mangaById(req.params["id"], (err, result) => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send(result);
+        }
+    });
+});
+
 app.get('/admin/:id', function(req, res) {
     console.log("REQUETE => " + __dirname + '/views/admin' + req.params["id"]);
     res.render(__dirname + '/views/admin/' + req.params["id"], { req: req }, (err, file) => {
@@ -148,12 +198,12 @@ app.post('/logout', (req, res) => {
 app.get('/:id', function(req, res) {
     res.render(req.params["id"], { req: req }, (err, file) => {
         if (err) {
-            console.log(err);
-            res.redirect('404');
+            res.status(404).redirect('/404');
         } else
             res.send(file);
     });
 });
+
 
 
 /****************
