@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="utf8_fr">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Obaju e-commerce template">
+    <meta name="author" content="Ondrej Svestka | ondrejsvestka.cz">
+    <meta name="keywords" content="">
+
+    <title>
+        Otaku Online : La passion du manga
+    </title>
+
+    <meta name="keywords" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
+
+    <!-- styles -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/owl.carousel.css" rel="stylesheet">
+    <link href="css/owl.theme.css" rel="stylesheet">
+
+    <!-- theme stylesheet -->
+    <link href="css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+
+    <!-- your stylesheet with modifications -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/respond.min.js"></script>
+
+    <link rel="shortcut icon" href="favicon">
+
+
+
+</head>
+
+<body>
+
+    <% include head %>
+
+        <div id="all">
+
+            <div id="content">
+                <div class="container">
+
+                    <div class="col-md-12">
+
+                        <ul class="breadcrumb">
+                            <li><a href="index">Accueil</a>
+                            </li>
+                            <li>Affichage des produits</li>
+                        </ul>
+
+                    </div>
+
+                    <style>
+                        #listeP div img {
+                            width: 25%
+                        }
+                        
+                        #listeP div img:hover {
+                            opacity: 0.7;
+                            transform: scale(1.1);
+                        }
+                        
+                        .spanTitle {
+                            position: absolute;
+                            font-size: 20px;
+                        }
+                        
+                        .spanRef {
+                            position: absolute;
+                            margin-top: 5%;
+                        }
+                        
+                        .spanPrice {
+                            position: absolute;
+                            margin-top: 9%;
+                        }
+                        
+                        .spanCateg {
+                            position: absolute;
+                            margin-top: 13%;
+                        }
+                    </style>
+
+                    <!--Liste des produits-->
+                    <div class="col-md-6" style="width:80%; margin-left:10.5%;">
+                        <div class="box">
+                            <h2>Liste des produits</h2>
+                            <hr>
+                            <div id="listeP"></div>
+                            <script>
+                                $.ajax({
+                                    'url': '/productAll',
+                                    'type': 'POST',
+                                    'data': {
+                                        'id': 1
+                                    },
+                                    'success': manga => {
+                                        try {
+                                            $('#listeP').append('<div><a href="detail?id=' + manga._id + '"><img src="/img/covers/' + manga._images[0] + '"></a><span class="spanRef"><b>Reference: </b>' + manga._reference + '</span><span class="spanTitle"><b>' + manga._title + '</b> - Volume: ' + manga._volumeNumber + '</span><span class="spanPrice"><b>Prix: </b>' + manga._price + ' €</span><span class="spanCateg"><b>Genres: </b>' + manga._genres + '</span></div><hr>');
+
+                                        } catch (e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                });
+                            </script>
+                            <hr>
+
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container -->
+            </div>
+            <!-- /#content -->
+
+            <% include foot %>
+
+        </div>
+        <!-- /#all -->
+
+        <!-- *** SCRIPTS TO INCLUDE ***
+ _________________________________________________________ -->
+        <script src="js/jquery-1.11.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/waypoints.min.js"></script>
+        <script src="js/modernizr.js"></script>
+        <script src="js/bootstrap-hover-dropdown.js"></script>
+        <script src="js/owl.carousel.min.js"></script>
+        <script src="js/front.js"></script>
+
+
+</body>
+
+</html>

@@ -123,7 +123,7 @@ module.exports = {
                     return (utils.isCallback(callback) ? callback(new Error("L'id du produit n'a pas été trouvé")) : new Error("L'id du produit n'a pas été trouvé"));
                 } else {
                     var line = result.rows[0];
-                    var manga = new Manga(line.id, line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher, line.mangaka_last_name + " " + line.mangaka_first_name, line.genres, line.images);
+                    var manga = new Manga(line.id, line.reference, line.title, line.volume_number, line.description, line.categorie, line.publish_date, line.price, line.publisher_name, line.mangaka_last_name + " " + line.mangaka_first_name, line.genres, line.images);
                     Object.freeze(manga);
                     return (utils.isCallback(callback) ? callback(undefined, manga) : manga);
                 }
