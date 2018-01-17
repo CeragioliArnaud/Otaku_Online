@@ -5,20 +5,20 @@ const logger = require('../Utils/logger').logger_dbManager;
 module.exports = {
 
     insert_createUser: (user, callback) => {
-        (async () => {
+        (async() => {
             try {
                 console.log(JSON.stringify(user));
                 logger.info("Requête demandée : insert_createUser(" + user.pseudo + ", " + user.email + ")");
 
-                const query0 =  "SELECT CASE WHEN pseudo!=$1 THEN NULL ELSE pseudo END, CASE WHEN email!=$2 THEN NULL ELSE email END " + 
-                                "FROM users " + 
-                                "WHERE pseudo = $1 OR email = $2";
+                const query0 = "SELECT CASE WHEN pseudo!=$1 THEN NULL ELSE pseudo END, CASE WHEN email!=$2 THEN NULL ELSE email END " +
+                    "FROM users " +
+                    "WHERE pseudo = $1 OR email = $2";
                 const result0 = await pool.query(query0, [user.pseudo, user.email]);
 
-                if(result0.rowCount == 2) {
+                if (result0.rowCount == 2) {
                     return (utils.isCallback(callback) ? callback(new Error("Pseudo et adresse email déjà utilisés")) : new Error("Pseudo et adresse email déjà utilisés"));
-                } else if(result0.rowCount == 1) {
-                    if(utils.isNullOrBlank(result0.rows[0].pseudo))
+                } else if (result0.rowCount == 1) {
+                    if (utils.isNullOrBlank(result0.rows[0].pseudo))
                         return (utils.isCallback(callback) ? callback(new Error("Adresse email déjà existante")) : new Error("Adresse email déjà existante"));
                     else
                         return (utils.isCallback(callback) ? callback(new Error("Pseudo déjà utilisé")) : new Error("Pseudo déjà utilisé"));
@@ -40,23 +40,23 @@ module.exports = {
     },
 
     select_authenticateUser: (login, pwd, callback) => {
-        (async () => {
+        (async() => {
             try {
                 logger.info("Requête demandée : select_authenticateUser(" + login + ")");
                 var query = "SELECT first_name, last_name, pseudo, email, CASE WHEN state='ADMI' THEN state ELSE NULL END AS state " +
-                            "FROM users " + 
-                            "WHERE " + (utils.isEmail(login) ? "email" : "pseudo") + "=$1 AND pwd=$2 AND state!='SUSP'";
+                    "FROM users " +
+                    "WHERE " + (utils.isEmail(login) ? "email" : "pseudo") + "=$1 AND pwd=$2 AND state!='SUSP'";
 
                 const result = await pool.query(query, [login, pwd]);
-                if(result.rowCount == 0) {
+                if (result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("Identifiants incorrects")) : new Error("Identifiants incorrects"));
-                } else if(result.rowCount > 1) {
+                } else if (result.rowCount > 1) {
                     logger.error("select_authenticateUser(" + login + ") - Erreur : plusieurs ligne ont été retournées");
                     return (utils.isCallback(callback) ? callback(new Error("Une erreur est survenue, réessayez ulterieurement")) : new Error("Une erreur est survenue, réessayez ulterieurement"));
                 } else {
                     var line = result.rows[0];
                     var user = new User(line.first_name, line.last_name, line.pseudo, line.email);
-                    if(!utils.isNullOrBlank(line.state)) {
+                    if (!utils.isNullOrBlank(line.state)) {
                         user.isAdmin = true;
                     }
                     Object.freeze(user);
@@ -89,19 +89,44 @@ module.exports = {
     */
 
     update_suspendUser: (login, callback) => {
-        (async () => {
+        (async() => {
             try {
                 logger.info("Requête demandée : update_suspendUser(" + login + ")");
                 const query = "UPDATE users SET state='SUSP' WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1";
                 const result = await client.query(query, [login]);
-                
-                if(result.rowCount == 0) {
+
+                if (result.rowCount == 0) {
                     return (utils.isCallback(callback) ? callback(new Error("Aucun utilisateur trouvé avec cet identifiant")) : new Error("Aucun utilisateur trouvé avec cet identifiant"));
                 } else {
-                    return (utils.isCallback(callback) ? callback(undefined) : undefined);
+                    if (utils.isCallback(callback))
+                        return callback();
+                    else
+                        return;
                 }
             } catch (e) {
                 logger.error("Echec de la requête update_suspendUser(" + login + ") : " + e.message)
+                throw e;
+            }
+        })().catch(e => logger.error(e.message))
+    },
+
+    update_administerUser: (login, callback) => {
+        (async() => {
+            try {
+                logger.info("Requête demandée : update_suspendUser(" + login + ")");
+                const query = "UPDATE users SET state='ADMIN' WHERE " + (utils.isEmail(email) ? "email" : "pseudo") + "=$1";
+                const result = await client.query(query, [login]);
+
+                if (result.rowCount == 0) {
+                    return (utils.isCallback(callback) ? callback(new Error("Aucun utilisateur trouvé avec cet identifiant")) : new Error("Aucun utilisateur trouvé avec cet identifiant"));
+                } else {
+                    if (utils.isCallback(callback))
+                        return callback();
+                    else
+                        return;
+                }
+            } catch (e) {
+                logger.error("Echec de la requête update_administerUser(" + login + ") : " + e.message)
                 throw e;
             }
         })().catch(e => logger.error(e.message))

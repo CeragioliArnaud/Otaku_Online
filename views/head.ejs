@@ -17,7 +17,7 @@
                     <li>
                         <a href="register">S'enregistrer</a>
                     </li>
-                    <% } else { %>
+                    <% } else if(req.session.user._isAdmin) { %>
                         <li>
                             <a href="customer-account">
                                 <%= req.session.user._pseudo %>
@@ -26,10 +26,22 @@
                         <li>
                             <a href="logout">Se déconnecter</a>
                         </li>
-                        <% } %>
+                        <li>
+                            <a href="admin/adminManagement">Gestion</a>
+                        </li>
+                        <% } else { %>
                             <li>
-                                <a href="contact">Contact</a>
+                                <a href="customer-account">
+                                    <%= req.session.user._pseudo %>
+                                </a>
                             </li>
+                            <li>
+                                <a href="logout">Se déconnecter</a>
+                            </li>
+                            <% } %>
+                                <li>
+                                    <a href="contact">Contact</a>
+                                </li>
             </ul>
         </div>
     </div>

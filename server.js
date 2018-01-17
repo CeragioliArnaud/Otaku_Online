@@ -34,11 +34,11 @@ app.all('/*', (req, res, next) => {
     next();
 });
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
     res.redirect('/index');
 });
 
-app.get('/categories', function (req, res) {
+app.get('/categories', (req, res) => {
     mangaController.select_allCategories((err, result) => {
         if (err) {
             res.status(500).send("Une erreur est survenue");
@@ -90,8 +90,41 @@ app.post('/admin/user', (req, res) => {
     //res.render('');
 });
 
+app.post('/admin/user/block', function(req, res) {
+    userController.update_suspendUser(req.body.identifiant, err => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send();
+        }
+    })
+})
+
+app.post('/admin/user/administer', function(req, res) {
+    userController.update_suspendUser(req.body.identifiant, err => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send();
+        }
+    })
+})
+
 app.post('/admin/manga/add', (req, res) => {
 
+});
+
+app.get('/admin/:id', function(req, res) {
+    console.log("REQUETE => " + __dirname + '/views/admin' + req.params["id"]);
+    res.render(__dirname + '/views/admin/' + req.params["id"], { req: req }, (err, file) => {
+        if (err) {
+            console.log("ERREUR ICI => " + err);
+            res.redirect('../404');
+        } else {
+            console.log("OK");
+            res.send(file);
+        }
+    });
 });
 
 app.post('/login', (req, res) => {
@@ -112,13 +145,12 @@ app.post('/logout', (req, res) => {
     res.status(200).send();
 });
 
-app.get('/:id', function (req, res) {
+app.get('/:id', function(req, res) {
     res.render(req.params["id"], { req: req }, (err, file) => {
         if (err) {
             console.log(err);
             res.redirect('404');
-        }
-        else
+        } else
             res.send(file);
     });
 });

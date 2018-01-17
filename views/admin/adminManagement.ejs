@@ -20,19 +20,19 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
 
     <!-- styles -->
-    <link href="css/font-awesome.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/owl.carousel.css" rel="stylesheet">
-    <link href="css/owl.theme.css" rel="stylesheet">
+    <link href="../css/font-awesome.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/owl.carousel.css" rel="stylesheet">
+    <link href="../css/owl.theme.css" rel="stylesheet">
 
     <!-- theme stylesheet -->
-    <link href="css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+    <link href="../css/style.default.css" rel="stylesheet" id="theme-stylesheet">
 
     <!-- your stylesheet with modifications -->
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
 
-    <script src="js/respond.min.js"></script>
+    <script src="../js/respond.min.js"></script>
 
     <link rel="shortcut icon" href="favicon.png">
 
@@ -44,10 +44,10 @@
 </head>
 
 <body>
-    <% include head %>
+    <% include ../head %>
 
         <style>
-            #mainselection select {
+            #mainSelection3 select {
                 border: 0;
                 color: #EEE;
                 background: transparent;
@@ -60,7 +60,7 @@
                 -webkit-appearance: none;
             }
             
-            #mainselection {
+            #mainSelection3 {
                 overflow: hidden;
                 width: 350px;
                 -moz-border-radius: 9px 9px 9px 9px;
@@ -85,12 +85,10 @@
                         </ul>
 
                     </div>
-
+                    <!--
+                    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
                     <script>
-                        function hide() {
-                            document.getElementsByClassName('selectTitle').style.display = 'none';
-                        }
-
                         $(function() {
                             var availableTags = [
                                 "ActionScript",
@@ -158,30 +156,66 @@
                                 });
                         });
                     </script>
+                -->
+
                     <!--UTILISATEURS-->
                     <div class="col-md-6">
                         <div class="box">
                             <h1>Gestion des utilisateurs</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <form action="adminUser" method="post">
+                            <form onsubmit="return false;">
+                                <div class="ui-widget">
+                                    <label for="tags-test">Tags: </label>
+                                    <input id="tags-test">
+                                </div>
+                                <!--
                                 <div class="form-group">
                                     <label for="name">Nom d'utilisateur</label>
-                                    <input type="text" class="form-control" id="name">
-                                </div>
+                                    <input type="text" class="form-control" id="nameUser">
+                                </div>-->
                                 <hr>
-                                <div id="mainselection" class="form-group">
-                                    <select onchange="hide()" autofocus>
-                                      <option class="selectTitle">Choisissez un utilisateur</option>
-                                        <%# user.forEach(function(user) { %>
-                                        <option><%#= user.name %></option>
-                                        <%# }); %>
-                                    </select>
-                                </div>
-
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="Block"></i>Blocker</button>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="Adminis"></i>Administrifier</button>
+                                    <button type="submit" class="btn btn-primary" onclick="block()"><i class="fa fa-user-md" value="Block" id="BlockButton"></i>Blocker</button>
+                                    <script>
+                                        var block = () => {
+                                            $.ajax({
+                                                'url': '/admin/user/block',
+                                                'type': 'POST',
+                                                'data': {
+                                                    "identifiant": $('#nameUser').val()
+                                                },
+                                                'complete': xhr => {
+                                                    $('.alert-danger').remove();
+                                                    if (xhr.status == 200) {
+                                                        window.location.replace("/admin/adminManagemnt");
+                                                    } else {
+                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertAfter($('#BlockButton'));
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    </script>
+                                    <button type="submit" class="btn btn-primary" onclick="administer()"><i class="fa fa-user-md" value="Adminis" id="AdministerButton"></i>Administrer</button>
+                                    <script>
+                                        var administer = () => {
+                                            $.ajax({
+                                                'url': '/admin/user/administer',
+                                                'type': 'POST',
+                                                'data': {
+                                                    "identifiant": $('#email-modal').val()
+                                                },
+                                                'complete': xhr => {
+                                                    $('.alert-danger').remove();
+                                                    if (xhr.status == 200) {
+                                                        window.location.replace("/index");
+                                                    } else {
+                                                        $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#AdministerButton'));
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    </script>
                                 </div>
 
                             </form>
@@ -195,22 +229,13 @@
                             <h1>Gestion des catégories</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <form action="/adminCateg" method="post">
+                            <form onsubmit="return false;">
                                 <div class="form-group">
                                     <label for="name">Catégories</label>
                                     <input type="text" class="form-control" id="name">
 
                                 </div>
                                 <hr>
-
-                                <div id="mainselection" class="form-group">
-                                    <select onchange="hide()">
-                                      <option class="selectTitle">Choisissez une catégorie</option>
-                                        <%# categorie.forEach(function(categorie) { %>
-                                            <option><%#= categorie.name %></option>
-                                        <%# }); %>
-                                    </select>
-                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="AddCat"></i>Ajouter</button>
@@ -227,7 +252,7 @@
                             <h1>Gestion des produits</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <form action="/adminProd" method="post">
+                            <form onsubmit="return false;">
                                 <!--REFERENCE-->
                                 <div class="form-group">
                                     <label for="ref">Reference</label>
@@ -236,29 +261,41 @@
                                 <hr>
                                 <!--TITRE-->
                                 <div class="form-group">
-                                    <label for="name">Titre</label>
+                                    <label for="titre">Titre</label>
                                     <input type="text" class="form-control" id="titre">
                                 </div>
                                 <hr>
                                 <!--N° VOLUME-->
                                 <div class="form-group">
-                                    <label for="number">N° du volume</label>
+                                    <label for="volume">N° du volume</label>
                                     <input type="number" class="form-control" id="volume">
                                 </div>
                                 <hr>
                                 <!--DESCRIPTION-->
                                 <div class="form-group">
-                                    <label for="name">Description</label>
+                                    <label for="descri">Description</label>
 
-                                </div><textarea name="texte1" cols="149" rows="5" id="descri"></textarea>
+                                </div><textarea name="texte1" cols="149" rows="5" id="descri" style="resize: none;"></textarea>
                                 <hr>
                                 <!--CATEGORIES-->
-                                <div id="mainselection" class="form-group">
-                                    <select onchange="hide()">
+                                <div id="mainselection3" class="form-group">
+                                    <select onchange="hide()" class="select_categ">
                                       <option class="selectTitle">Choisissez une catégorie</option>
-                                        <%# categorie.forEach(function(categorie) { %>
-                                            <option><%#= categorie.name %></option>
-                                        <%# }); %>
+                                      <script>
+                                            $.ajax({
+                                                'url': '/categories',
+                                                'type': 'GET',
+                                                'success': data => {
+                                                    try {
+                                                        data.forEach(element => {
+                                                            $('.select_categ').append('<option value=' + element.id + '>' + element.name + '</option>');
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                }
+                                            });
+                                        </script>
                                     </select>
                                 </div>
                                 <hr>
@@ -270,23 +307,94 @@
                                 <hr>
                                 <!--PRIX-->
                                 <div class="form-group">
-                                    <label for="number">Prix</label>
+                                    <label for="prix">Prix</label>
                                     <input id="prix" type="number" class="form-control">
                                 </div>
                                 <hr>
                                 <!--STUDIO DE PUBLICATION-->
                                 <div class="form-group">
-                                    <label for="number">Prix</label>
-                                    <input id="prix" type="number" class="form-control">
+                                    <label for="publisher">Studio de publication</label>
+                                    <input id="publisher" type="text" class="form-control">
                                 </div>
                                 <hr>
-                                <!--MANGAKA
+                                <!--MANGAKA-->
                                 <div class="form-group">
-                                    <label for="number">Prix</label>
-                                    <input id="prix" type="number" class="form-control">
+                                    <label for="mangaka">Mangaka</label>
+                                    <input id="mangaka" type="text" class="form-control">
                                 </div>
                                 <hr>
                                 <!--GENRES-->
+                                <!--
+                                <script>
+                                    $(function() {
+                                        var availableTags = [
+                                            "ActionScript",
+                                            "AppleScript",
+                                            "Asp",
+                                            "BASIC",
+                                            "C",
+                                            "C++",
+                                            "Clojure",
+                                            "COBOL",
+                                            "ColdFusion",
+                                            "Erlang",
+                                            "Fortran",
+                                            "Groovy",
+                                            "Haskell",
+                                            "Java",
+                                            "JavaScript",
+                                            "Lisp",
+                                            "Perl",
+                                            "PHP",
+                                            "Python",
+                                            "Ruby",
+                                            "Scala",
+                                            "Scheme"
+                                        ];
+
+                                        function split(val) {
+                                            return val.split(/,\s*/);
+                                        }
+
+                                        function extractLast(term) {
+                                            return split(term).pop();
+                                        }
+
+                                        $("#tags")
+                                            // don't navigate away from the field on tab when selecting an item
+                                            .on("keydown", function(event) {
+                                                if (event.keyCode === $.ui.keyCode.TAB &&
+                                                    $(this).autocomplete("instance").menu.active) {
+                                                    event.preventDefault();
+                                                }
+                                            })
+                                            .autocomplete({
+                                                minLength: 0,
+                                                source: function(request, response) {
+                                                    // delegate back to autocomplete, but extract the last term
+                                                    response($.ui.autocomplete.filter(
+                                                        availableTags, extractLast(request.term)));
+                                                },
+                                                focus: function() {
+                                                    // prevent value inserted on focus
+                                                    return false;
+                                                },
+                                                select: function(event, ui) {
+                                                    var terms = split(this.value);
+                                                    // remove the current input
+                                                    terms.pop();
+                                                    // add the selected item
+                                                    terms.push(ui.item.value);
+                                                    // add placeholder to get the comma-and-space at the end
+                                                    terms.push("");
+                                                    this.value = terms.join(", ");
+                                                    return false;
+                                                }
+                                            });
+                                    });
+                                </script>
+                            -->
+
                                 <div class="ui-widget">
                                     <label for="tags">Tag programming languages: </label>
                                     <input id="tags" size="50">
@@ -309,21 +417,21 @@
             </div>
             <!-- /#content -->
 
-            <% include foot %>
+            <% include ../foot %>
 
         </div>
         <!-- /#all -->
 
         <!-- *** SCRIPTS TO INCLUDE ***
  _________________________________________________________ -->
-        <script src="js/jquery-1.11.0.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/jquery.cookie.js"></script>
-        <script src="js/waypoints.min.js"></script>
-        <script src="js/modernizr.js"></script>
-        <script src="js/bootstrap-hover-dropdown.js"></script>
-        <script src="js/owl.carousel.min.js"></script>
-        <script src="js/front.js"></script>
+        <script src="../js/jquery-1.11.0.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/jquery.cookie.js"></script>
+        <script src="../js/waypoints.min.js"></script>
+        <script src="../js/modernizr.js"></script>
+        <script src="../js/bootstrap-hover-dropdown.js"></script>
+        <script src="../js/owl.carousel.min.js"></script>
+        <script src="../js/front.js"></script>
 
 </body>
 
