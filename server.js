@@ -73,6 +73,17 @@ app.get('/mangas', (req, res) => {
         } else {
             res.status(200).send(result);
         }
+    });
+});
+
+app.get('/detail', (req, res) => {
+    console.log(req.query.id);
+    mangaController.select_mangaById(req.query.id, (err, result) => {
+        if (err) {
+            res.status(500).send("Une erreur est survenue");
+        } else {
+            res.render('detail', { req: req, manga: result });
+        }
     })
 });
 
@@ -212,6 +223,18 @@ app.post('/login', (req, res) => {
         }
     });
 });
+
+app.post('/productAll', (req, res) => {
+    mangaController.select_mangaById(req.body.id, (err, result) => {
+        if (err) {
+            logger.info(err);
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send(result);
+        }
+    });
+});
+
 
 app.post('/logout', (req, res) => {
     req.session.user = undefined;
