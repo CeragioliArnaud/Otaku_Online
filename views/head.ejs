@@ -111,9 +111,9 @@ _________________________________________________________ -->
         <div class="navbar-header">
 
             <a class="navbar-brand home" href="index" data-animate-hover="bounce">
-                <img src="img/logo.png" alt="Obaju logo" class="hidden-xs" style="width:300px; margin-top:2%;">
-                <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs">
-                <span class="sr-only">Obaju - go to homepage</span>
+                <img src="img/logo.png" alt="Otaku_Online logo" class="hidden-xs" style="width:300px; margin-top:2%;">
+                <img src="img/logo-small.png" alt="Otaku_Online logo" class="visible-xs">
+                <span class="sr-only">Otaku Online - go to homepage</span>
             </a>
             <div class="navbar-buttons">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
@@ -121,12 +121,12 @@ _________________________________________________________ -->
                     <i class="fa fa-align-justify"></i>
                 </button>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search">
-                    <span class="sr-only">Toggle search</span>
+                    <span class="sr-only">Rechercher</span>
                     <i class="fa fa-search"></i>
                 </button>
                 <a class="btn btn-default navbar-toggle" href="basket">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="hidden-xs">X items in cart</span>
+                    <span class="hidden-xs">Panier</span>
                 </a>
             </div>
         </div>
@@ -157,7 +157,7 @@ _________________________________________________________ -->
                                                     'success': data => {
                                                         try {
                                                             data.forEach(element => {
-                                                                $('#listCategories').append('<li><a href="category" title="' + element.description + '">' + element.name + "</a></li>");
+                                                                $('#listCategories').append('<li><a href="productList?categorie=' + element.id + '" title="' + element.description + '">' + element.name + "</a></li>");
                                                             });
                                                         } catch (e) {
                                                             console.log(e);
@@ -171,22 +171,22 @@ _________________________________________________________ -->
                                         <h5>Genres</h5>
                                         <ul>
                                             <li>
-                                                <a href="category">Fantasy</a>
+                                                <a href="productList?genre=13">Fantasy</a>
                                             </li>
                                             <li>
-                                                <a href="category">Combat</a>
+                                                <a href="productList?genre=5">Combat</a>
                                             </li>
                                             <li>
-                                                <a href="category">Amitié</a>
+                                                <a href="productList?genre=2">Amitié</a>
                                             </li>
                                             <li>
-                                                <a href="category">Detective</a>
+                                                <a href="productList?genre=7">Detective</a>
                                             </li>
                                             <li>
-                                                <a href="category">Ecchi</a>
+                                                <a href="productList?genre=9">Ecchi</a>
                                             </li>
                                             <li>
-                                                <a href="category">Hentai</a>
+                                                <a href="productList?genre=15">Guerre</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -206,14 +206,15 @@ _________________________________________________________ -->
                 </li>
 
                 <li class="dropdown yamm-fw">
-                    <a href="customer-account" class="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
+                    <a href="productList" class="dropdown-toggle" data-hover="dropdown" data-delay="200">Magasin</a>
                 </li>
 
                 <li class="dropdown yamm-fw">
                     <a href="chat" class="dropdown-toggle" data-hover="dropdown" data-delay="200">Chat</a>
                 </li>
+
                 <li class="dropdown yamm-fw">
-                    <a href="productList" class="dropdown-toggle" data-hover="dropdown" data-delay="200">Magasin</a>
+                    <a href="customer-account" class="dropdown" data-hover="dropdown" data-delay="200">Mon compte</a>
                 </li>
             </ul>
 
@@ -241,15 +242,69 @@ _________________________________________________________ -->
 
         <div class="collapse clearfix" id="search">
 
-            <form class="navbar-form" role="search">
+            <form class="navbar-form" role="search" method="GET" action="detail">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search">
-                    <span class="input-group-btn">
+                    <input id="input-search" type="text" name="name" class="form-control" placeholder="Search" onchange="hinter(this)" list="listNames">
+                    <datalist id="listNames"></datalist>
+                    <script>
+                        function search() {
+                            if ($('#input-search').val().length >= 3) {
+                                $.ajax({
+                                    'url': '/search/',
+                                    'type': 'GET',
+                                    'success': data => {
+                                        try {
+                                            data.forEach(element => {
+                                                $('#listCategories').append('<li><a href="productList?categorie=' + element.id + '" title="' + element.description + '">' + element.name + "</a></li>");
+                                            });
+                                        } catch (e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                });
+                            }
+                        };
 
+                        window.hinterXHR = new XMLHttpRequest();
+                        
+                        // Autocomplete for form
+                        function hinter(input) {
+
+                            // retrieve the datalist element
+                            var listNames = $('#listNames');
+
+                            // minimum number of characters before we start to generate suggestions
+                            if (($('#input-search').val().length < 3)) {
+                                return;
+                            } else {
+
+                                // abort any pending requests
+                                window.hinterXHR.abort();
+
+                                window.hinterXHR.onreadystatechange = function () {
+                                    if (this.readyState == 4 && this.status == 200) {
+
+                                        // We're expecting a json response so we convert it to an object
+                                        var response = JSON.parse(this.responseText);
+
+                                        // clear any previously loaded options in the datalist
+                                        listNames.children().remove();
+                                        response.forEach(function (item) {
+                                            // attach the option to the datalist element
+                                            listNames.append($('<option>').attr("link", item.id).text(item.title));
+                                        });
+                                    }
+                                };
+
+                                window.hinterXHR.open("GET", "/search?name=" + input.value, true);
+                                window.hinterXHR.send()
+                            }
+                        }
+                    </script>
+                    <span class="input-group-btn">
                         <button type="submit" class="btn btn-primary">
                             <i class="fa fa-search"></i>
                         </button>
-
                     </span>
                 </div>
             </form>

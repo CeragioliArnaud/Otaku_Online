@@ -249,7 +249,7 @@
                             <h1>Gestion des produits</h1>
                             <p>Selectionnez les actions à effectuer parmi les suivantes:</p>
                             <hr>
-                            <form onsubmit="return false;">
+                            <form onsubmit="return false;" id="form-ajout-manga">
                                 <!--REFERENCE-->
                                 <div class="form-group">
                                     <label for="ref">Reference</label>
@@ -276,20 +276,16 @@
                                 <hr>
                                 <!--CATEGORIES-->
                                 <div id="mainselection3" class="form-group">
-                                    <select onchange="hide()" class="select_categ">
+                                    <select class="select_categ" id="categ">
                                       <option class="selectTitle">Choisissez une catégorie</option>
                                       <script>
                                             $.ajax({
                                                 'url': '/categories',
                                                 'type': 'GET',
                                                 'success': data => {
-                                                    try {
-                                                        data.forEach(element => {
-                                                            $('.select_categ').append('<option value=' + element.id + '>' + element.name + '</option>');
-                                                        });
-                                                    } catch (e) {
-                                                        console.log(e);
-                                                    }
+                                                    data.forEach(element => {
+                                                        $('.select_categ').append('<option value=' + element.id + '>' + element.name + '</option>');
+                                                    });
                                                 }
                                             });
                                         </script>
@@ -320,88 +316,45 @@
                                     <input id="mangaka" type="text" class="form-control">
                                 </div>
                                 <hr>
-                                <!--GENRES-->
-                                <!--
-                                <script>
-                                    $(function() {
-                                        var availableTags = [
-                                            "ActionScript",
-                                            "AppleScript",
-                                            "Asp",
-                                            "BASIC",
-                                            "C",
-                                            "C++",
-                                            "Clojure",
-                                            "COBOL",
-                                            "ColdFusion",
-                                            "Erlang",
-                                            "Fortran",
-                                            "Groovy",
-                                            "Haskell",
-                                            "Java",
-                                            "JavaScript",
-                                            "Lisp",
-                                            "Perl",
-                                            "PHP",
-                                            "Python",
-                                            "Ruby",
-                                            "Scala",
-                                            "Scheme"
-                                        ];
-
-                                        function split(val) {
-                                            return val.split(/,\s*/);
-                                        }
-
-                                        function extractLast(term) {
-                                            return split(term).pop();
-                                        }
-
-                                        $("#tags")
-                                            // don't navigate away from the field on tab when selecting an item
-                                            .on("keydown", function(event) {
-                                                if (event.keyCode === $.ui.keyCode.TAB &&
-                                                    $(this).autocomplete("instance").menu.active) {
-                                                    event.preventDefault();
-                                                }
-                                            })
-                                            .autocomplete({
-                                                minLength: 0,
-                                                source: function(request, response) {
-                                                    // delegate back to autocomplete, but extract the last term
-                                                    response($.ui.autocomplete.filter(
-                                                        availableTags, extractLast(request.term)));
-                                                },
-                                                focus: function() {
-                                                    // prevent value inserted on focus
-                                                    return false;
-                                                },
-                                                select: function(event, ui) {
-                                                    var terms = split(this.value);
-                                                    // remove the current input
-                                                    terms.pop();
-                                                    // add the selected item
-                                                    terms.push(ui.item.value);
-                                                    // add placeholder to get the comma-and-space at the end
-                                                    terms.push("");
-                                                    this.value = terms.join(", ");
-                                                    return false;
-                                                }
-                                            });
-                                    });
-                                </script>
-                            -->
 
                                 <div class="ui-widget">
-                                    <label for="tags">Tag programming languages: </label>
-                                    <input id="tags" size="50">
+                                    <label for="genre">Genres: </label>
+                                    <input id="genre" size="50" disabled>
                                 </div>
                                 <hr>
                                 <!--BOUTONS-->
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="AddCat"></i>Ajouter</button>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-user-md" value="DelCat"></i>Supprimer</button>
+                                    <button type="submit" class="btn btn-primary" onclick="ajout()"><i class="fa fa-user-md" value="AddCat"></i>Ajouter</button>
                                 </div>
+                                <script>
+                                    var ajout = () => {
+                                        $.ajax({
+                                            'url': '/admin/manga/add',
+                                            'type': 'POST',
+                                            'data': {
+                                                "reference": $('#ref').val(),
+                                                "title": $('#titre').val(),
+                                                "volume_Number": $('#volume').val(),
+                                                "description": $('#descri').val(),
+                                                "categorie": $('#categ').val(),
+                                                "publish_date": $('#date').val(),
+                                                "price": $('#prix').val(),
+                                                "publisher": $('#publisher').val(),
+                                                "mangaka": $('#mangaka').val(),
+                                                "genre": $('#genre').val().split(' '),
+                                            },
+                                            'complete': xhr => {
+                                                $('.alert-success').remove();
+                                                $('.alert-danger').remove();
+                                                if (xhr.status == 200) {
+                                                    $('<div>').text("Produit ajouté").attr("class", "alert alert-success alert-email-email").insertBefore($('#form-ajout-manga'));
+                                                        } else {
+                                                    $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-ajout-manga'));
+                                                }
+                                            }
+                                        });
+                                    }
+                                </script>
                             </form>
                             <hr>
 

@@ -76,6 +76,7 @@
                                 $(function () {
                                     var author = "<%= req.session.user._pseudo %>";
                                     $('form').submit(() => {
+                                        if($('#m').val().trim() != "");
                                         socket.emit('chat message', { "author": author, "text": $('#m').val() });
                                         $('#m').val('');
                                         return false;
