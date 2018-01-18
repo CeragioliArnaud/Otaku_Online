@@ -78,11 +78,13 @@
                                 $(function() {
                                     var author = "<%= req.session.user._pseudo %>";
                                     $('form').submit(() => {
-                                        socket.emit('chat message', {
-                                            "author": author,
-                                            "text": $('#m').val()
-                                        });
-                                        $('#m').val('');
+                                        if ($('#m').val().trim() != "") {
+                                            socket.emit('chat message', {
+                                                "author": author,
+                                                "text": $('#m').val()
+                                            });
+                                            $('#m').val('');
+                                        }
                                         return false;
                                     });
                                 });

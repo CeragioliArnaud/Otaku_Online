@@ -70,7 +70,7 @@ logger_dbManager.configure({
 			}
 		}),
 		new winston.transports.File({
-			filename: (dir + "/webServices.log"),
+			filename: (dir + "/dbManager.log"),
 			json: true,
 			level: 'info',
 			maxFiles: 5,

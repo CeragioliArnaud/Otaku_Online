@@ -66,8 +66,18 @@ app.get('/categories', (req, res) => {
     })
 });
 
+app.get('/genres', (req, res) => {
+    mangaController.select_allGenres((err, result) => {
+        if (err) {
+            res.status(500).send("Une erreur est survenue");
+        } else {
+            res.status(200).send(result);
+        }
+    })
+});
+
 app.get('/mangas', (req, res) => {
-    mangaController.select_allMangas((err, result) => {
+    mangaController.select_allMangas(req.query.categorie, req.query.genre, req.query.price, (err, result) => {
         if (err) {
             res.status(500).send("Une erreur est survenue");
         } else {
@@ -77,12 +87,31 @@ app.get('/mangas', (req, res) => {
 });
 
 app.get('/detail', (req, res) => {
-    console.log(req.query.id);
-    mangaController.select_mangaById(req.query.id, (err, result) => {
+    if (req.query.id) {
+        mangaController.select_mangaById(req.query.id, (err, result) => {
+            if (err) {
+                res.status(500).send("Une erreur est survenue");
+            } else {
+                res.render('detail', { req: req, manga: result });
+            }
+        })
+    } else {
+        mangaController.select_mangaByName(S(req.query.name).toLowerCase().s, (err, result) => {
+            if (err) {
+                res.redirect('productList');
+            } else {
+                res.render('detail', { req: req, manga: result });
+            }
+        })
+    }
+});
+
+app.get('/search', (req, res) => {
+    mangaController.select_searchName(S(req.query.name).toLowerCase().s, (err, result) => {
         if (err) {
             res.status(500).send("Une erreur est survenue");
         } else {
-            res.render('detail', { req: req, manga: result });
+            res.status(200).send(result);
         }
     })
 });
@@ -105,6 +134,24 @@ app.post('/updatePwd', (req, res) => {
             if (err) {
                 res.status(500).send(err.message);
             } else {
+                res.status(200).send();
+            }
+        })
+    } else {
+        res.status(401).send();
+    }
+});
+
+app.post('/updateInfos', (req, res) => {
+    if (req.session.user) {
+        if (utils.isNullOrBlank(req.body.pseudo) || utils.isNullOrBlank(req.body.email))
+            res.status(422).send("Pseudo ou mot de passe manquant");
+        user = new User(req.body.first_name, req.body.last_name, req.body.pseudo, req.body.email, req.body.phone, "");
+        userController.update_changeInfos(req.session.user._pseudo, req.session.user._email, user, (err, newUser) => {
+            if (err) {
+                res.status(500).send(err.message);
+            } else {
+                req.session.user = newUser;
                 res.status(200).send();
             }
         })
@@ -172,7 +219,27 @@ app.post('/admin/user/administer', function(req, res) {
 })
 
 app.post('/admin/manga/add', (req, res) => {
-
+    var manga = new Manga(
+        "",
+        req.body.reference,
+        req.body.title,
+        req.body.volume_Number,
+        req.body.description,
+        req.body.categorie,
+        req.body.publish_date,
+        req.body.price,
+        req.body.publisher,
+        req.body.mangaka,
+        req.body.genre
+    );
+    console.log(JSON.stringify(manga));
+    mangaController.insert_addProduct(manga, err => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send();
+        }
+    })
 });
 
 app.post('/admin/manga/modify', (req, res) => {
@@ -187,7 +254,7 @@ app.post('/admin/manga/modify', (req, res) => {
         req.body.price,
         req.body.publisher,
         req.body.mangaka,
-        "", // TODO ? Non géré dans la requêtes sql....
+        "",
         req.body.images
     );
     mangaController.update_modifyProduct(manga, err => {
@@ -212,10 +279,8 @@ app.get('/admin/manga/getById/:id', (req, res) => {
 app.get('/admin/:id', function(req, res) {
     res.render('admin_' + req.params["id"], { req: req }, (err, file) => {
         if (err) {
-            console.log("ERREUR ICI => " + err);
             res.redirect('../404');
         } else {
-            console.log("OK");
             res.send(file);
         }
     });

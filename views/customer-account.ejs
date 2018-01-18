@@ -51,7 +51,8 @@
                     <div class="col-md-12">
 
                         <ul class="breadcrumb">
-                            <li><a href="#">Accueil</a>
+                            <li>
+                                <a href="#">Accueil</a>
                             </li>
                             <li>Mon Compte</li>
                         </ul>
@@ -71,17 +72,21 @@
 
                                 <ul class="nav nav-pills nav-stacked">
                                     <li class="active">
-                                        <a href="customer-account"><i class="fa fa-user"></i> Mon compte</a>
+                                        <a href="customer-account">
+                                            <i class="fa fa-user"></i> Mon compte</a>
                                     </li>
                                     <li>
-                                        <a href="customer-orders"><i class="fa fa-list"></i> Mes commandes</a>
+                                        <a href="customer-orders">
+                                            <i class="fa fa-list"></i> Mes commandes</a>
                                     </li>
                                     <li>
 
-                                        <a href="customer-wishlist" disabled><i class="fa fa-heart"></i> Ma wishlist</a>
+                                        <a href="customer-wishlist" disabled>
+                                            <i class="fa fa-heart"></i> Ma wishlist</a>
                                     </li>
                                     <li>
-                                        <a href="logout"><i class="fa fa-sign-out"></i> Se déconnecter</a>
+                                        <a href="logout">
+                                            <i class="fa fa-sign-out"></i> Se déconnecter</a>
                                     </li>
                                 </ul>
                             </div>
@@ -114,38 +119,37 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" id="form-group-password_1">
                                             <label for="password_1">Nouveau Mdp</label>
-                                            <input type="password" class="form-control" id="password_1" onkeyup="validateMdp()" onfocus="validateMdp()">
+                                            <input type="password" class="form-control" id="password_1" onkeyup="validateMdp_1()" onfocus="validateMdp_1()">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group" id="form-group-password_2">
                                             <label for="password_2">Rentrez le Mdp</label>
-                                            <input type="password" class="form-control" id="password_2" onkeyup="validateMdp2()" onfocus="validateMdp2()">
+                                            <input type="password" class="form-control" id="password_2" onkeyup="validateMdp_2()" onfocus="validateMdp_2()">
                                         </div>
                                     </div>
                                 </div>
                                 <script>
-                                    validateMdp = () => {
+                                    validateMdp_1 = () => {
                                         var elem = $('#password_1');
                                         if (elem.val().match(/^[a-zA-Z0-9]{6,18}$/)) {
                                             $('#form-group-password_1').removeClass('has-error').addClass("has-success");
                                         } else {
                                             $('#form-group-password_1').removeClass('has-success').addClass("has-error");
                                         }
-                                        validateAll();
                                     }
 
-                                    validateMdp2 = () => {
+                                    validateMdp_2 = () => {
                                         var elem = $('#password_2');
                                         if (elem.val().match(/^[a-zA-Z0-9]{6,18}$/) && elem.val() == $('#password_1').val()) {
                                             $('#form-group-password_2').removeClass('has-error').addClass("has-success");
                                         } else {
                                             $('#form-group-password_2').removeClass('has-success').addClass("has-error");
                                         }
-                                        validateAll();
+                                        validateAll_1();
                                     }
 
-                                    validateAll = () => {
+                                    validateAll_1 = () => {
                                         $('#button-updatePwd').prop('disabled', !($('#password_old').val() != "" &&
                                             $('#password_1').val().match(/^[a-zA-Z0-9]{6,18}$/) &&
                                             $('#password_1').val() == $('#password_2').val()));
@@ -174,14 +178,24 @@
                                 <!-- /.row -->
 
                                 <div class="col-sm-12 text-center">
-                                    <button type="submit" id="button-updatePwd" class="btn btn-primary" onclick="changePassword()" disabled><i class="fa fa-save"></i> Enregistrer le Mdp</button>
+                                    <button type="submit" id="button-updatePwd" class="btn btn-primary" onclick="changePassword()" disabled>
+                                        <i class="fa fa-save"></i> Enregistrer le Mdp</button>
                                 </div>
                             </form>
 
                             <hr>
 
                             <h3>Détails personnels</h3>
-                            <form>
+                            <form id="form-changeInfos" onsubmit="return false;">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="pseudo">Nom d'utilisateur</label>
+                                            <input type="text" class="form-control" id="pseudo" value="<%= req.session.user._pseudo %>" onkeyup="validateInfos()" onfocus="validateInfos()">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -206,16 +220,57 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="#form-group-email">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control" id="email" value="<%= req.session.user._email %>">
+                                            <input type="text" class="form-control" id="email" value="<%= req.session.user._email %>" onkeyup="validateEmail()" onfocus="validateEmail()">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 text-center">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save changes</button>
+                                        <button type="submit" class="btn btn-primary" id="button-updateInfos" onclick="changeInfos()">
+                                            <i class="fa fa-save"></i> Save changes</button>
 
                                     </div>
                                 </div>
+                                <script>
+                                    validateEmail = () => {
+                                        var elem = $('#email');
+                                        if (elem.val().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                                            $('#form-group-email').removeClass('has-error').addClass("has-success");
+                                        } else {
+                                            $('#form-group-email').removeClass('has-success').addClass("has-error");
+                                        }
+                                        validateInfos();
+                                    }
+
+                                    validateInfos = () => {
+                                        $('#button-updateInfos').prop('disabled', !($('#pseudo').val() != "" &&
+                                            $('#email').val().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+                                        ));
+                                    }
+
+                                    changeInfos = () => {
+                                        $.ajax({
+                                            'url': '/updateInfos',
+                                            'type': 'POST',
+                                            'data': {
+                                                "pseudo": $('#pseudo').val(),
+                                                "first_name": $('#firstname').val(),
+                                                "last_name": $('#lastname').val(),
+                                                "phone": $('#phone').val(),
+                                                "email": $('#email').val()
+                                            },
+                                            'complete': xhr => {
+                                                $('.alert-success').remove();
+                                                $('.alert-danger').remove();
+                                                if (xhr.status == 200) {
+                                                    $('<div>').text("Changement des informations effectué").attr("class", "alert alert-success alert-email-email").insertBefore($('#form-changeInfos'));
+                                                } else {
+                                                    $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-changeInfos'));
+                                                }
+                                            }
+                                        });
+                                    }
+                                </script>
                             </form>
                         </div>
                     </div>

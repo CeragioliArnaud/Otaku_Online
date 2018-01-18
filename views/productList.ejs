@@ -40,7 +40,7 @@
 
 </head>
 
-<body>
+<body onload="refresh()">
 
     <% include head %>
 
@@ -52,7 +52,8 @@
                     <div class="col-md-12">
 
                         <ul class="breadcrumb">
-                            <li><a href="index">Accueil</a>
+                            <li>
+                                <a href="index">Accueil</a>
                             </li>
                             <li>Affichage des produits</li>
                         </ul>
@@ -63,58 +64,168 @@
                         #listeP div img {
                             width: 25%
                         }
-                        
+
                         #listeP div img:hover {
                             opacity: 0.7;
                             transform: scale(1.1);
                         }
-                        
+
                         .spanTitle {
                             position: absolute;
                             font-size: 20px;
                         }
-                        
+
                         .spanRef {
                             position: absolute;
                             margin-top: 5%;
                         }
-                        
+
                         .spanPrice {
                             position: absolute;
                             margin-top: 9%;
                         }
-                        
+
                         .spanCateg {
                             position: absolute;
                             margin-top: 13%;
                         }
                     </style>
 
-                    <!--Liste des produits-->
-                    <div class="col-md-6" style="width:80%; margin-left:10.5%;">
-                        <div class="box">
-                            <h2>Liste des produits</h2>
-                            <hr>
-                            <div id="listeP"></div>
-                            <script>
-                                $.ajax({
-                                    'url': '/productAll',
-                                    'type': 'POST',
-                                    'data': {
-                                        'id': 1
-                                    },
-                                    'success': manga => {
-                                        try {
-                                            $('#listeP').append('<div><a href="detail?id=' + manga._id + '"><img src="/img/covers/' + manga._images[0] + '"></a><span class="spanRef"><b>Reference: </b>' + manga._reference + '</span><span class="spanTitle"><b>' + manga._title + '</b> - Volume: ' + manga._volumeNumber + '</span><span class="spanPrice"><b>Prix: </b>' + manga._price + ' €</span><span class="spanCateg"><b>Genres: </b>' + manga._genres + '</span></div><hr>');
+                    <div class="col-md-3">
+                        <!-- *** MENUS AND FILTERS ***
+_________________________________________________________ -->
+                        <div class="panel panel-default sidebar-menu">
 
-                                        } catch (e) {
-                                            console.log(e);
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Categories</h3>
+                            </div>
+
+                            <div class="panel-body">
+                                <ul class="nav nav-pills nav-stacked category-menu" id="filtre-categories">
+                                    <script>
+                                        $.ajax({
+                                            'url': '/categories',
+                                            'type': 'GET',
+                                            'success': data => {
+                                                try {
+                                                    data.forEach(element => {
+                                                        $('#filtre-categories').append('<li><a href="productList?categorie=' + element.id + '" title="' + element.description + '">' + element.name + "</a>");
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                            }
+                                        });
+                                    </script>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default sidebar-menu">
+
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Genres
+                                    <a class="btn btn-xs btn-danger pull-right" onclick="clearGenre()">
+                                        <i class="fa fa-times-circle"></i> Clear</a>
+                                </h3>
+                            </div>
+
+                            <div class="panel-body">
+
+                                <form>
+                                    <div class="form-group" id="filtre-genre">
+                                        <script>
+                                            $.ajax({
+                                                'url': '/genres',
+                                                'type': 'GET',
+                                                'success': data => {
+                                                    try {
+                                                        data.forEach(element => {
+                                                            $('#filtre-genre').append('<div class="checkbox"><label><input type="checkbox" onchange="handleGenre(this)" value="' + element.id + '">' + element.name + '</label></div>');
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                }
+                                            });
+
+                                            function handleGenre(elem) {
+                                                if (elem.checked) {
+                                                    filtre_genres.push(elem.value);
+                                                } else {
+                                                    filtre_genres.splice(filtre_genres.indexOf(elem.value), 1);
+                                                }
+                                                refresh();
+                                            }
+
+                                            function clearGenre() {
+                                                $('input:checked').prop("checked", false);
+                                                filtre_genres = [];
+                                                refresh();
+                                            }
+                                        </script>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                        <!-- *** MENUS AND FILTERS END *** -->
+                    </div>
+
+
+                    <div class="col-md-9">
+                        <!--Liste des produits-->
+                        <div class="row" id="productMain">
+                            <div class="box">
+                                <h2>Liste des produits</h2>
+                                <hr>
+                                <div id="listeP"></div>
+                                <script>
+                                    var filtre_categories = [];
+                                    var filtre_genres = [];
+
+                                    if (getParameterByName('categorie') != null)
+                                        filtre_categories.push(getParameterByName('categorie'));
+
+                                    if (getParameterByName('categorie') != null)
+                                        filtre_genres.push(getParameterByName('genre'));
+
+                                    var reg = new RegExp(',', 'g');
+                                    var refresh = () => {
+                                        var data = { "categorie": filtre_categories };
+                                        if (filtre_genres.length != 0) {
+                                            data.genre = filtre_genres;
                                         }
-                                    }
-                                });
-                            </script>
-                            <hr>
 
+                                        $.ajax({
+                                            'url': '/mangas',
+                                            'type': 'GET',
+                                            'data': data,
+                                            'success': mangas => {
+                                                $('.rowManga').remove();
+                                                if (!Array.isArray(mangas)) {
+                                                    mangas = [mangas];
+                                                }
+                                                mangas.forEach(manga => {
+                                                    $('#listeP').append('<div class="rowManga"><a href="detail?id=' + manga.id + '"><img src="/img/covers/' + manga.images + '"></a><span class="spanRef"><b>Reference: </b>' + manga.reference + '</span><span class="spanTitle"><b>' + manga.title + '</b> - Volume: ' + manga.volume_number + '</span><span class="spanPrice"><b>Prix: </b>' + manga.price + ' €</span><span class="spanCateg"><b>Genres: </b>' + manga.genres.toString().replace(reg, ', ') + '</span><hr></div>');
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                    function getParameterByName(name, url) {
+                                        if (!url) url = window.location.href;
+                                        name = name.replace(/[\[\]]/g, "\\$&");
+                                        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                                            results = regex.exec(url);
+                                        if (!results) return null;
+                                        if (!results[2]) return '';
+                                        return decodeURIComponent(results[2].replace(/\+/g, " "));
+                                    }
+                                </script>
+                                <hr>
+
+                            </div>
                         </div>
                     </div>
 
