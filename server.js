@@ -417,7 +417,7 @@ app.get('/customer-*', (req, res, next) => {
 });
 
 app.get('/:id', function(req, res) {
-    res.render(req.params["id"], {}, (err, file) => {
+    res.render(req.params["id"], { req: req }, (err, file) => {
         if (err) {
             res.status(404).redirect('/404');
         } else
