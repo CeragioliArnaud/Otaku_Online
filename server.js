@@ -56,6 +56,14 @@ app.get('/', (req, res) => {
     res.redirect('/index');
 });
 
+// detail.ejs + head.ejs + productList.ejs 
+/********************
+ *				    *
+ *   Selectionnez   *
+ *   Catégories     *
+ *				    *
+ *******************/
+
 app.get('/categories', (req, res) => {
     mangaController.select_allCategories((err, result) => {
         if (err) {
@@ -65,6 +73,14 @@ app.get('/categories', (req, res) => {
         }
     })
 });
+
+// detail.ejs + productList.ejs 
+/********************
+ *				    *
+ *     Filtre       *
+ *  Genres/Mangas   *
+ *				    *
+ *******************/
 
 app.get('/genres', (req, res) => {
     mangaController.select_allGenres((err, result) => {
@@ -86,6 +102,14 @@ app.get('/mangas', (req, res) => {
     });
 });
 
+// detail.ejs 
+/********************
+ *				    *
+ *  Affiche données *
+ *      Mangas      *
+ *				    *
+ *******************/
+
 app.get('/detail', (req, res) => {
     if (req.query.id) {
         mangaController.select_mangaById(req.query.id, (err, result) => {
@@ -106,6 +130,14 @@ app.get('/detail', (req, res) => {
     }
 });
 
+// head.ejs
+/********************
+ *				    *
+ *  Affiche données *
+ *     SearchBar    *
+ *				    *
+ *******************/
+
 app.get('/search', (req, res) => {
     mangaController.select_searchName(S(req.query.name).toLowerCase().s, (err, result) => {
         if (err) {
@@ -115,6 +147,14 @@ app.get('/search', (req, res) => {
         }
     })
 });
+
+// register.ejs 
+/********************
+ *				    *
+ *  Insert / Update *
+ *   User / Infos   *
+ *				    *
+ *******************/
 
 app.post('/register', (req, res) => {
     var user = new User("", "", req.body.pseudo, req.body.email, "", req.body.pwd);
@@ -160,6 +200,12 @@ app.post('/updateInfos', (req, res) => {
     }
 });
 
+/***********************
+ *				       *
+ *  Pages accès Admin  *
+ *				       *
+ ***********************/
+
 app.all('/admin/*', (req, res, next) => {
     if (req.session.user && req.session.user._isAdmin) {
         next();
@@ -188,6 +234,12 @@ app.post('/admin/user', (req, res) => {
     //res.render('');
 });
 
+/***********************
+ *				       *
+ *     Bloquer user    *
+ *				       *
+ ***********************/
+
 app.post('/admin/user/block', function(req, res) {
     userController.update_suspendUser(req.body.identifiant, err => {
         if (err) {
@@ -197,6 +249,30 @@ app.post('/admin/user/block', function(req, res) {
         }
     })
 })
+
+// admin_management.ejs
+/***********************
+ *				       *
+ *  Administrer User   *
+ *				       *
+ ***********************/
+
+app.post('/admin/user/administer', function(req, res) {
+    userController.update_administerUser(req.body.identifiant, err => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send();
+        }
+    })
+})
+
+// detail.ejs
+/***********************
+ *				       *
+ *  Supprimer produit  *
+ *				       *
+ ***********************/
 
 app.post('/admin/user/delProd', function(req, res) {
     mangaController.update_suspendUser(req.body.identifiant, err => {
@@ -208,15 +284,12 @@ app.post('/admin/user/delProd', function(req, res) {
     })
 })
 
-app.post('/admin/user/administer', function(req, res) {
-    userController.update_administerUser(req.body.identifiant, err => {
-        if (err) {
-            res.status(500).send(err.message);
-        } else {
-            res.status(200).send();
-        }
-    })
-})
+// admin_management.ejs
+/***********************
+ *				       *
+ *   Ajouter produit   *
+ *				       *
+ ***********************/
 
 app.post('/admin/manga/add', (req, res) => {
     var manga = new Manga(
@@ -241,6 +314,13 @@ app.post('/admin/manga/add', (req, res) => {
         }
     })
 });
+
+// admin_management.ejs
+/***********************
+ *				       *
+ *   Modifier produit  *
+ *				       *
+ ***********************/
 
 app.post('/admin/manga/modify', (req, res) => {
     var manga = new Manga(
@@ -310,11 +390,23 @@ app.post('/productAll', (req, res) => {
     });
 });
 
+/******************
+ *				  *
+ *     LOGOUT     *
+ *				  *
+ ******************/
 
 app.post('/logout', (req, res) => {
     req.session.user = undefined;
     res.status(200).send();
 });
+
+/******************
+ *				  *
+ *   navigation   *
+ *   dynamique    *
+ *				  *
+ ******************/
 
 app.get('/customer-*', (req, res, next) => {
     if (req.session.user) {
@@ -325,7 +417,7 @@ app.get('/customer-*', (req, res, next) => {
 });
 
 app.get('/:id', function(req, res) {
-    res.render(req.params["id"], { req: req }, (err, file) => {
+    res.render(req.params["id"], {}, (err, file) => {
         if (err) {
             res.status(404).redirect('/404');
         } else
@@ -337,7 +429,7 @@ app.get('/:id', function(req, res) {
 
 /****************
  *				*
- *  Lancement du *
+ * Lancement du *
  *    Serveur	*
  *				*
  ****************/
@@ -347,12 +439,12 @@ var server = app.listen(properties.get("server.port"), properties.get("server.ho
     logger.info(properties.get("console.start"));
 });
 
-/****************
- *				*
+/*****************
+ *				 *
  * Arret/Erreurs *
- *    Serveur	*
- *				*
- ****************/
+ *    Serveur	 *
+ *				 *
+ ***************µ*/
 
 process.on('SIGINT', () => {
     process.stdout.write("\r\x1b[K");
