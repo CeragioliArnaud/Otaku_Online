@@ -34,7 +34,7 @@
 
     <script src="js/respond.min.js"></script>
 
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="favicon">
 
 
 
@@ -233,6 +233,31 @@
                                             <i class="fa fa-shopping-cart"></i> Ajouter à la carte</a>
                                         <a href="basket" class="btn btn-default">
                                             <i class="fa fa-heart"></i> Ajouter à la wishlist</a>
+                                        <%  if(req.session.user && req.session.user._isAdmin) { %>
+                                            <a href="basket" class="btn btn-primary" onclick="delProduct()" style="background:red;">
+                                                <i></i> Supprimer</a>
+
+                                            <script>
+                                                var delProduct = () => {
+                                                    $.ajax({
+                                                        'url': '/admin/user/delProd',
+                                                        'type': 'POST',
+                                                        'data': {
+                                                            "identifiant": manga.id
+                                                        },
+                                                        'complete': xhr => {
+                                                            $('.alert-danger').remove();
+                                                            $('.alert-success').remove();
+                                                            if (xhr.status == 200) {
+                                                                $('<div>').text("Le produit à été supprimé.").attr("class", "alert alert-success alert-email-email").insertBefore($('#gestion-user'));
+                                                            } else {
+                                                                $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#gestion-user'));
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                            <% } %>
                                     </p>
 
 

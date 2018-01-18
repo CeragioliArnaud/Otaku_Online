@@ -151,6 +151,16 @@ app.post('/admin/user/block', function(req, res) {
     })
 })
 
+app.post('/admin/user/delProd', function(req, res) {
+    mangaController.update_suspendUser(req.body.identifiant, err => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send();
+        }
+    })
+})
+
 app.post('/admin/user/administer', function(req, res) {
     userController.update_administerUser(req.body.identifiant, err => {
         if (err) {

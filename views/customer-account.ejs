@@ -34,7 +34,7 @@
 
     <script src="js/respond.min.js"></script>
 
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="favicon">
 
 
 
@@ -94,7 +94,9 @@
 
                     <div class="col-md-9">
                         <div class="box">
-                            <h1><%= req.session.user._pseudo %></h1>
+                            <h1>
+                                <%= req.session.user._pseudo %>
+                            </h1>
                             <p class="lead">Modifier vos paramètre ou détails personnels.</p>
 
                             <h3>Modifier le mot de passe</h3>
@@ -125,32 +127,30 @@
                                 <script>
                                     validateMdp = () => {
                                         var elem = $('#password_1');
-                                        if(elem.val().match(/^[a-zA-Z0-9]{6,18}$/)) {
+                                        if (elem.val().match(/^[a-zA-Z0-9]{6,18}$/)) {
                                             $('#form-group-password_1').removeClass('has-error').addClass("has-success");
                                         } else {
                                             $('#form-group-password_1').removeClass('has-success').addClass("has-error");
                                         }
                                         validateAll();
                                     }
-    
+
                                     validateMdp2 = () => {
                                         var elem = $('#password_2');
-                                        if(elem.val().match(/^[a-zA-Z0-9]{6,18}$/) && elem.val() == $('#password_1').val()) {
+                                        if (elem.val().match(/^[a-zA-Z0-9]{6,18}$/) && elem.val() == $('#password_1').val()) {
                                             $('#form-group-password_2').removeClass('has-error').addClass("has-success");
                                         } else {
                                             $('#form-group-password_2').removeClass('has-success').addClass("has-error");
                                         }
                                         validateAll();
                                     }
-    
+
                                     validateAll = () => {
-                                        $('#button-updatePwd').prop('disabled', 
-                                            !($('#password_old').val() != "" && 
-                                            $('#password_1').val().match(/^[a-zA-Z0-9]{6,18}$/) && 
-                                            $('#password_1').val() == $('#password_2').val())
-                                        );
+                                        $('#button-updatePwd').prop('disabled', !($('#password_old').val() != "" &&
+                                            $('#password_1').val().match(/^[a-zA-Z0-9]{6,18}$/) &&
+                                            $('#password_1').val() == $('#password_2').val()));
                                     }
-    
+
                                     changePassword = () => {
                                         $.ajax({
                                             'url': '/updatePwd',
@@ -162,7 +162,7 @@
                                             'complete': xhr => {
                                                 $('.alert-success').remove();
                                                 $('.alert-danger').remove();
-                                                if(xhr.status == 200) {
+                                                if (xhr.status == 200) {
                                                     $('<div>').text("Nouveau mot de passe enregistré").attr("class", "alert alert-success alert-email-email").insertBefore($('#form-changePwd'));
                                                 } else {
                                                     $('<div>').text(xhr.responseText).attr("class", "alert alert-danger alert-email-email").insertBefore($('#form-changePwd'));
