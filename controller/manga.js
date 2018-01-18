@@ -122,11 +122,11 @@ module.exports = {
                 logger.info("Requête demandée : select_allMangas()");
                 var query = "SELECT DISTINCT p.id, p.reference, p.title, p.volume_number, p.price, c.name as categorie, p.images[1], " +
                     "(SELECT array_to_string(array_agg(DISTINCT g.name), ',') as genres " +
-                    "FROM genre g INNER JOIN product_genre pg on(g.id = pg.genre_id) " +
+                    "FROM genre g LEFT JOIN product_genre pg on(g.id = pg.genre_id) " +
                     "WHERE pg.product_id = p.id) " +
                     "FROM product p " +
                     "INNER JOIN categorie c on(p.categorie = c.id) " +
-                    "INNER JOIN product_genre pg on(p.id = pg.product_id) " +
+                    "LEFT JOIN product_genre pg on(p.id = pg.product_id) " +
                     "INNER JOIN genre g on(pg.genre_id = g.id) " +
                     "WHERE p.deprecated=false AND p.id=pg.product_id";
 
