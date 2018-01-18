@@ -188,7 +188,7 @@ app.post('/admin/user', (req, res) => {
     //res.render('');
 });
 
-app.post('/admin/user/block', function (req, res) {
+app.post('/admin/user/block', function(req, res) {
     userController.update_suspendUser(req.body.identifiant, err => {
         if (err) {
             res.status(500).send(err.message);
@@ -198,7 +198,17 @@ app.post('/admin/user/block', function (req, res) {
     })
 })
 
-app.post('/admin/user/administer', function (req, res) {
+app.post('/admin/user/delProd', function(req, res) {
+    mangaController.update_suspendUser(req.body.identifiant, err => {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send();
+        }
+    })
+})
+
+app.post('/admin/user/administer', function(req, res) {
     userController.update_administerUser(req.body.identifiant, err => {
         if (err) {
             res.status(500).send(err.message);
@@ -266,7 +276,7 @@ app.get('/admin/manga/getById/:id', (req, res) => {
     });
 });
 
-app.get('/admin/:id', function (req, res) {
+app.get('/admin/:id', function(req, res) {
     res.render('admin_' + req.params["id"], { req: req }, (err, file) => {
         if (err) {
             res.redirect('../404');
@@ -314,7 +324,7 @@ app.get('/customer-*', (req, res, next) => {
     }
 });
 
-app.get('/:id', function (req, res) {
+app.get('/:id', function(req, res) {
     res.render(req.params["id"], { req: req }, (err, file) => {
         if (err) {
             res.status(404).redirect('/404');

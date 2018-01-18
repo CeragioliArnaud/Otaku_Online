@@ -34,7 +34,7 @@
 
     <script src="js/respond.min.js"></script>
 
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon" href="favicon">
 
 
 
@@ -48,21 +48,23 @@
 
             <div id="content">
                 <div class="container">
-                    <ul id="messages"></ul>
+                    <div style="background:aliceblue; overflow: scroll; max-height: 100%; width: 100%; height:445px; border-radius: 8px;">
+                        <ul id="messages"></ul>
+                    </div>
 
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
                     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 
-                    <script> 
+                    <script>
                         var socket = io.connect("http://91.121.66.187:443");
-                        $(function () {
+                        $(function() {
                             socket.on('histo', historique => {
                                 historique.forEach(msg => {
-                                    $('#messages').append($('<li>').text(msg.author + " : " + msg.text));
+                                    $('#messages').append($('<p>').text(msg.author + " : " + msg.text));
                                 });
                             });
                             socket.on('chat message', msg => {
-                                $('#messages').append($('<li>').text(msg.author + " : " + msg.text));
+                                $('#messages').append($('<p>').text(msg.author + " : " + msg.text));
                                 window.scrollTo(0, document.body.scrollHeight);
                             });
                         });
@@ -70,23 +72,27 @@
 
                     <form action "">
                         <% if(req.session.user) { %>
-                            <input id="m" autocomplete="off" />
-                            <button>Envoyer</button>
-                            <script> 
-                                $(function () {
+                            <input id="m" autocomplete="off" placeholder="Entrez votre message..." style="padding:6px; margin-left:3%; width:23%; border-radius:6px;" />&nbsp;&nbsp;
+                            <button class="btn btn-primary navbar-btn">Envoyer</button>
+                            <script>
+                                $(function() {
                                     var author = "<%= req.session.user._pseudo %>";
                                     $('form').submit(() => {
-                                        if($('#m').val().trim() != "");
-                                        socket.emit('chat message', { "author": author, "text": $('#m').val() });
-                                        $('#m').val('');
+                                        if ($('#m').val().trim() != "") {
+                                            socket.emit('chat message', {
+                                                "author": author,
+                                                "text": $('#m').val()
+                                            });
+                                            $('#m').val('');
+                                        }
                                         return false;
                                     });
                                 });
                             </script>
-                        <% } else { %>
-                            <input id="m" autocomplete="off" placeholder="Vous devez être connecté pour parler" disabled/>
-                            <button disabled>Envoyer</button>
-                        <% } %>
+                            <% } else { %>
+                                <input id="m" autocomplete="off" placeholder="Vous devez être connecté pour parler" style="padding:6px; margin-left:3%; width:23%; border-radius:6px;" disabled/>
+                                <button disabled class="btn btn-primary navbar-btn">Envoyer</button>
+                                <% } %>
                     </form>
                 </div>
                 <!-- /.container -->

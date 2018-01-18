@@ -111,9 +111,9 @@ _________________________________________________________ -->
         <div class="navbar-header">
 
             <a class="navbar-brand home" href="index" data-animate-hover="bounce">
-                <img src="img/logo.png" alt="Otaku_Online logo" class="hidden-xs" style="width:300px; margin-top:2%;">
-                <img src="img/logo-small.png" alt="Otaku_Online logo" class="visible-xs">
-                <span class="sr-only">Otaku Online - go to homepage</span>
+                <img src="img/logo.png" alt="Otaku_Online logo" style="width:300px; margin-top:2%;">
+                <img src="img/logo-small.png" alt="Obaju logo" class="visible-xs">
+                <span class="sr-only">Obaju - go to homepage</span>
             </a>
             <div class="navbar-buttons">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
@@ -266,7 +266,7 @@ _________________________________________________________ -->
                         };
 
                         window.hinterXHR = new XMLHttpRequest();
-                        
+
                         // Autocomplete for form
                         function hinter(input) {
 
@@ -281,7 +281,7 @@ _________________________________________________________ -->
                                 // abort any pending requests
                                 window.hinterXHR.abort();
 
-                                window.hinterXHR.onreadystatechange = function () {
+                                window.hinterXHR.onreadystatechange = function() {
                                     if (this.readyState == 4 && this.status == 200) {
 
                                         // We're expecting a json response so we convert it to an object
@@ -289,7 +289,7 @@ _________________________________________________________ -->
 
                                         // clear any previously loaded options in the datalist
                                         listNames.children().remove();
-                                        response.forEach(function (item) {
+                                        response.forEach(function(item) {
                                             // attach the option to the datalist element
                                             listNames.append($('<option>').attr("link", item.id).text(item.title));
                                         });
